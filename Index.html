@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q12 PuG: Phänomenologie fragiler Staatlichkeit - Fallstudie Haiti</title>
+    <!-- Tailwind CSS für modernes Layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome für Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Roboto:wght@300;400;500;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #1f2937;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Merriweather', serif;
+        }
+
+        /* Tab Navigation Styles */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-btn {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn.active {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #dc2626;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: scaleX(0);
+            }
+            to {
+                transform: scaleX(1);
+            }
+        }
+
+        .nav-btn:hover:not(.active) {
+            color: #ef4444;
+            transform: translateY(-2px);
+        }
+
+        /* Progress Indicator */
+        .progress-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+
+        /* Akademischer Text-Style */
+        .academic-text {
+            line-height: 1.9;
+            font-size: 1.05rem;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .academic-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Improved Input Styles */
+        textarea, select {
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Save Indicator */
+        .save-indicator {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Druck-Optimierung */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+
+            .tab-content {
+                display: block !important;
+                page-break-after: always;
+                page-break-inside: avoid;
+            }
+
+            .tab-content:last-child {
+                page-break-after: auto;
+            }
+
+            /* Inputs im Druck sichtbar mit Inhalt */
+            textarea, select {
+                border: 1px solid #ccc !important;
+                background: white !important;
+                color: black !important;
+                font-size: 11pt !important;
+                line-height: 1.4 !important;
+                padding: 8px !important;
+                page-break-inside: avoid;
+            }
+
+            textarea {
+                min-height: 100px !important;
+                height: auto !important;
+                overflow: visible !important;
+                white-space: pre-wrap !important;
+                word-wrap: break-word !important;
+            }
+
+            select {
+                -webkit-appearance: none;
+                appearance: none;
+                background: white !important;
+                padding-right: 20px !important;
+            }
+
+            /* Print selected option value */
+            select::after {
+                content: attr(data-selected);
+            }
+
+            table {
+                page-break-inside: avoid;
+            }
+
+            .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 20px !important;
+                margin: 0 !important;
+            }
+
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                page-break-inside: avoid;
+            }
+
+            h2, h3 {
+                page-break-after: avoid;
+            }
+
+            .academic-text {
+                column-count: 1 !important;
+            }
+
+            /* Print-only headers */
+            .print-header {
+                display: block !important;
+                text-align: center;
+                margin-bottom: 30px;
+                padding-bottom: 15px;
+                border-bottom: 2px solid #333;
+            }
+
+            .print-header h1 {
+                font-size: 20pt;
+                margin-bottom: 10px;
+            }
+
+            .print-header p {
+                font-size: 12pt;
+                color: #666;
+            }
+        }
+
+        .print-header {
+            display: none;
+        }
+
+        /* Improved Slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-track {
+            background: linear-gradient(90deg, #ef4444, #10b981);
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #3b82f6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            margin-top: -8px;
+        }
+
+        input[type="range"]::-moz-range-track {
+            background: linear-gradient(90deg, #ef4444, #10b981);
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #3b82f6;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #1f2937;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Character counter */
+        .char-counter {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Progress Indicator -->
+    <div class="progress-indicator no-print" id="progress-bar" style="width: 0%"></div>
+
+    <!-- Save Indicator -->
+    <div class="save-indicator" id="save-indicator">
+        <i class="fas fa-check-circle mr-2"></i>Automatisch gespeichert
+    </div>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 shadow-lg no-print">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-3xl font-bold mb-1">Politik und Gesellschaft Q12</h1>
+                <p class="text-slate-300 text-sm flex items-center">
+                    <i class="fas fa-graduation-cap mr-2"></i>
+                    Leistungsniveau: Erhöhtes Anforderungsniveau
+                </p>
+            </div>
+            <div class="text-center md:text-right">
+                <span class="block text-sm font-light text-slate-300">Thema:</span>
+                <span class="font-bold text-xl text-red-400">Fragile Staatlichkeit: Haiti</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50 no-print">
+        <div class="container mx-auto flex flex-wrap justify-center gap-2 md:gap-8 px-4">
+            <button onclick="switchTab('theorie')" class="nav-btn active py-4 px-4 md:px-2 text-sm md:text-base transition">
+                <i class="fas fa-book mr-2"></i>1. Theoretischer Rahmen
+            </button>
+            <button onclick="switchTab('fallstudie')" class="nav-btn py-4 px-4 md:px-2 text-sm md:text-base transition">
+                <i class="fas fa-globe-americas mr-2"></i>2. Fallstudie Haiti
+            </button>
+            <button onclick="switchTab('transfer')" class="nav-btn py-4 px-4 md:px-2 text-sm md:text-base transition">
+                <i class="fas fa-chart-line mr-2"></i>3. Transfer & Analyse
+            </button>
+            <button onclick="switchTab('reflexion')" class="nav-btn py-4 px-4 md:px-2 text-sm md:text-base transition">
+                <i class="fas fa-lightbulb mr-2"></i>4. Reflexion
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 md:p-8 flex-grow my-8">
+
+        <!-- Print Header (nur im Druck sichtbar) -->
+        <div class="print-header">
+            <h1>Q12 Politik und Gesellschaft</h1>
+            <p>Fallstudie: Fragile Staatlichkeit am Beispiel Haiti</p>
+            <p style="font-size: 10pt; margin-top: 10px;">Name: __________________ | Datum: __________________</p>
+        </div>
+
+        <!-- TAB 1: THEORIE -->
+        <div id="theorie" class="tab-content active">
+            <div class="card p-6 md:p-8 mb-6">
+                <h2 class="text-3xl font-serif text-slate-800 mb-6 border-b-2 border-slate-200 pb-3 flex items-center">
+                    <i class="fas fa-book-open text-blue-600 mr-3"></i>
+                    1. Das Konzept fragiler Staatlichkeit
+                </h2>
+                
+                <div class="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500 p-5 mb-8 rounded-r-lg no-print">
+                    <h3 class="font-bold text-blue-900 text-lg mb-2">
+                        <i class="fas fa-tasks mr-2"></i>Arbeitsauftrag
+                    </h3>
+                    <p class="text-blue-800">
+                        Erarbeiten Sie aus dem folgenden Fachtext die drei zentralen Dimensionen staatlicher Herrschaft nach Schneckener heraus. Definieren Sie diese in eigenen Worten in der untenstehenden Eingabemaske.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Lesetext -->
+                    <article class="academic-text text-slate-700 card p-6 informational-text">
+                        <h3 class="text-xl font-bold mb-4 text-slate-800">Theoretischer Hintergrund</h3>
+                        <p>
+                            Die politikwissenschaftliche Auseinandersetzung mit dem Phänomen der fragilen Staatlichkeit erfordert zunächst eine präzise Definition dessen, was einen funktionierenden Staat im modernen Sinne konstituiert. In Anlehnung an das Weber'sche Modell wird Staatlichkeit primär über das legitime Monopol physischer Gewaltsamkeit definiert. Ulrich Schneckener erweitert diesen Ansatz jedoch um eine funktionale Perspektive und unterscheidet drei elementare Dimensionen: Sicherheit, Wohlfahrt und Legitimität.
+                        </p>
+                        <p>
+                            Ein Staat gilt als konsolidiert, wenn er in der Lage ist, diese drei Kernfunktionen flächendeckend zu gewährleisten. Die <strong>Sicherheitsfunktion</strong> (Gewaltmonopol) impliziert die Kontrolle des Staatsgebiets und den Schutz der Bürger vor physischer Gewalt, sowohl durch interne als auch externe Akteure. Die Erosion dieser Funktion führt zu rechtsfreien Räumen, in denen nicht-staatliche Gewaltakteure (Warlords, Milizen, kriminelle Netzwerke) die Herrschaft übernehmen.
+                        </p>
+                        <p>
+                            Die <strong>Wohlfahrtsfunktion</strong> bezieht sich auf die Fähigkeit des Staates, grundlegende öffentliche Güter und Dienstleistungen bereitzustellen. Hierzu zählen Infrastruktur, Bildung, Gesundheitsversorgung sowie Mechanismen zur sozioökonomischen Umverteilung. Ein Versagen in diesem Bereich untergräbt den Gesellschaftsvertrag, da der Staat seiner Fürsorgepflicht gegenüber dem Souverän – dem Volk – nicht nachkommt.
+                        </p>
+                        <p>
+                            Schließlich ist die <strong>Legitimitätsfunktion</strong> entscheidend für die Stabilität eines politischen Gemeinwesens. Sie beschreibt die Akzeptanz der Herrschaftsordnung durch die Bevölkerung sowie die Partizipationsmöglichkeiten innerhalb des politischen Systems. Fehlt diese Akzeptanz, beispielsweise durch Korruption, Wahlmanipulation oder die systematische Exklusion bestimmter Bevölkerungsgruppen, verliert der Staat seine moralische und politische Autorität. Fragile Staatlichkeit ist somit kein binärer Zustand, sondern ein Kontinuum, das von "weak states" über "failing states" bis hin zu "collapsed states" reicht, in denen staatliche Strukturen vollends implodiert sind.
+                        </p>
+                    </article>
+
+                    <!-- Schülerarbeit -->
+                    <div class="card p-6 bg-gradient-to-br from-gray-50 to-white student-work">
+                        <h3 class="text-xl font-bold mb-4 text-slate-800 flex items-center">
+                            <i class="fas fa-pencil-alt text-blue-600 mr-2"></i>
+                            Exzerpt: Dimensionen der Staatlichkeit
+                        </h3>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                                <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2 text-xs">1</span>
+                                Sicherheitsfunktion (Gewaltmonopol)
+                            </label>
+                            <textarea 
+                                id="input-security" 
+                                class="w-full h-32 p-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none" 
+                                placeholder="Ihre Definition in eigenen Worten..."></textarea>
+                            <div class="char-counter" id="counter-security">0 Zeichen</div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                                <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2 text-xs">2</span>
+                                Wohlfahrtsfunktion (Daseinsvorsorge)
+                            </label>
+                            <textarea 
+                                id="input-welfare" 
+                                class="w-full h-32 p-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none" 
+                                placeholder="Ihre Definition in eigenen Worten..."></textarea>
+                            <div class="char-counter" id="counter-welfare">0 Zeichen</div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                                <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2 text-xs">3</span>
+                                Legitimitätsfunktion (Rechtsstaatlichkeit/Partizipation)
+                            </label>
+                            <textarea 
+                                id="input-legitimacy" 
+                                class="w-full h-32 p-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none" 
+                                placeholder="Ihre Definition in eigenen Worten..."></textarea>
+                            <div class="char-counter" id="counter-legitimacy">0 Zeichen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: FALLSTUDIE HAITI -->
+        <div id="fallstudie" class="tab-content">
+            <div class="card p-6 md:p-8 mb-6">
+                <h2 class="text-3xl font-serif text-slate-800 mb-6 border-b-2 border-slate-200 pb-3 flex items-center">
+                    <i class="fas fa-globe-americas text-red-600 mr-3"></i>
+                    2. Fallstudie: Die Republik Haiti
+                </h2>
+                
+                <div class="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500 p-5 mb-8 rounded-r-lg no-print">
+                    <h3 class="font-bold text-blue-900 text-lg mb-2">
+                        <i class="fas fa-video mr-2"></i>Videoanalyse & Recherche
+                    </h3>
+                    <p class="text-blue-800">
+                        Sehen Sie sich die verlinkten Inhalte an und lesen Sie den Fachtext. Identifizieren Sie konkrete Ereignisse, die auf ein Staatsversagen hindeuten.
+                    </p>
+                </div>
+
+                <!-- Video -->
+                <div class="w-full aspect-video bg-black rounded-xl shadow-2xl mb-8 overflow-hidden no-print video-container">
+                    <iframe 
+                        class="w-full h-full" 
+                        src="https://www.youtube-nocookie.com/embed/EIjU8GLWVN0?si=L4y-wZkH2xPz5w7e" 
+                        title="Haiti Reportage" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            

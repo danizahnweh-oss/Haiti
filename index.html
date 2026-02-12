@@ -3,622 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Q12 PuG: Fragile Staatlichkeit - Premium Edition</title>
+    <title>Q12 PuG: Fragile Staatlichkeit - Advanced Module</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap');
-        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: #1f2937; }
-        h1, h2, h3 { font-family: 'Merriweather', serif; }
-        .tab-content { display: none; animation: fadeIn 0.5s; }
+        
+        :root {
+            --primary: #1e3a8a; /* Dunkelblau */
+            --secondary: #dc2626; /* Rot */
+            --accent: #10b981; /* Grün */
+        }
+
+        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); color: #1f2937; }
+        h1, h2, h3, h4 { font-family: 'Merriweather', serif; }
+        
+        /* Tab Animationen */
+        .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .nav-btn.active { color: #dc2626; font-weight: 600; }
-        .nav-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: #dc2626; }
-        .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.07); transition: all 0.3s; }
-        .card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .glossary-term { cursor: help; border-bottom: 2px dotted #3b82f6; color: #2563eb; position: relative; }
-        .glossary-popup { display: none; position: absolute; background: white; border: 2px solid #3b82f6; border-radius: 8px; padding: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); z-index: 1000; max-width: 300px; font-size: 0.875rem; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Navigation */
+        .nav-btn { position: relative; opacity: 0.7; transition: all 0.3s; }
+        .nav-btn:hover { opacity: 1; background-color: rgba(255,255,255,0.5); }
+        .nav-btn.active { opacity: 1; color: var(--primary); font-weight: 700; background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-radius: 8px; }
+        .nav-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 10%; width: 80%; height: 3px; background: var(--primary); border-radius: 2px; }
+
+        /* Karten & Elemente */
+        .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); }
+        .glossary-term { cursor: help; border-bottom: 2px dotted var(--primary); color: var(--primary); position: relative; font-weight: 500; }
+        .glossary-popup { display: none; position: absolute; background: #1e293b; color: white; padding: 12px; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 50; width: 250px; font-size: 0.85rem; line-height: 1.4; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 8px; }
         .glossary-term:hover .glossary-popup { display: block; }
-        .highlight-yellow { background: linear-gradient(180deg, transparent 50%, #fef08a 50%); }
-        .highlight-green { background: linear-gradient(180deg, transparent 50%, #bbf7d0 50%); }
-        .highlight-blue { background: linear-gradient(180deg, transparent 50%, #bfdbfe 50%); }
-        .save-indicator { position: fixed; bottom: 80px; right: 20px; background: #10b981; color: white; padding: 12px 20px; border-radius: 8px; opacity: 0; transition: all 0.3s; z-index: 1000; }
-        .save-indicator.show { opacity: 1; transform: translateY(0); }
-        .char-counter { font-size: 0.75rem; color: #6b7280; text-align: right; margin-top: 4px; }
+        
+        /* Roadmap Styles */
+        .roadmap-step { position: relative; padding-left: 2rem; border-left: 3px solid #cbd5e1; padding-bottom: 2rem; }
+        .roadmap-step:last-child { border-left-color: transparent; }
+        .roadmap-marker { position: absolute; left: -11px; top: 0; width: 20px; height: 20px; border-radius: 50%; background: white; border: 4px solid var(--primary); transition: all 0.3s; }
+        .roadmap-step:hover .roadmap-marker { transform: scale(1.3); border-color: var(--secondary); }
+
+        /* Chart Styles */
+        .bar-container { background-color: #e2e8f0; border-radius: 9999px; overflow: hidden; height: 1.5rem; }
+        .bar-fill { height: 100%; display: flex; align-items: center; padding-left: 0.5rem; color: white; font-size: 0.75rem; font-weight: bold; transition: width 1s ease-in-out; }
+
+        /* Speichern Indikator */
+        .save-indicator { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 10px 20px; border-radius: 50px; opacity: 0; transition: opacity 0.3s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); z-index: 1000; font-weight: 600; font-size: 0.9rem; pointer-events: none; }
+        .save-indicator.show { opacity: 1; transform: translateY(-10px); }
+
+        /* Print Optimierung */
         @media print {
-            body { background: white !important; }
-            .no-print { display: none !important; }
-            .tab-content { display: block !important; page-break-after: always; }
-            textarea, select { border: 1px solid #ccc !important; height: auto !important; }
+            body { background: white !important; color: black !important; }
+            .no-print, nav, header, footer, .roadmap-container, .chart-visuals { display: none !important; }
+            .tab-content { display: block !important; margin-bottom: 3rem; page-break-after: always; }
+            .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
+            textarea, select { border: 1px solid #000 !important; font-family: 'Courier New', monospace; font-size: 11pt; }
+            h2 { border-bottom: 2px solid black !important; }
+            /* Nur Schülereingaben und wichtige Textpassagen drucken */
+            .student-work { display: block !important; }
+            .print-header { display: block !important; margin-bottom: 20px; border-bottom: 2px solid black; padding-bottom: 10px; }
         }
+        .print-header { display: none; }
     </style>
 </head>
-<body>
-    <div class="save-indicator" id="save-indicator"><i class="fas fa-check-circle mr-2"></i>Gespeichert</div>
-    
-    <header class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 shadow-lg no-print">
-        <div class="container mx-auto">
-            <h1 class="text-3xl font-bold mb-1">Politik und Gesellschaft Q12 - Premium Edition</h1>
-            <p class="text-slate-300 text-sm">Erweiterte Fallstudie: Fragile Staatlichkeit (Haiti & Somalia)</p>
-        </div>
-    </header>
-
-    <nav class="bg-white shadow-md sticky top-0 z-50 no-print">
-        <div class="container mx-auto flex flex-wrap justify-center gap-4 px-4 py-2">
-            <button onclick="switchTab('theorie')" class="nav-btn active px-4 py-2 transition"><i class="fas fa-book mr-1"></i>Theorie</button>
-            <button onclick="switchTab('haiti')" class="nav-btn px-4 py-2 transition"><i class="fas fa-globe mr-1"></i>Haiti</button>
-            <button onclick="switchTab('analyse')" class="nav-btn px-4 py-2 transition"><i class="fas fa-chart-line mr-1"></i>Analyse</button>
-            <button onclick="switchTab('vergleich')" class="nav-btn px-4 py-2 transition"><i class="fas fa-balance-scale mr-1"></i>Vergleich</button>
-            <button onclick="switchTab('transfer')" class="nav-btn px-4 py-2 transition"><i class="fas fa-chess mr-1"></i>Transfer</button>
-            <button onclick="switchTab('quellen')" class="nav-btn px-4 py-2 transition"><i class="fas fa-newspaper mr-1"></i>Quellen</button>
-            <button onclick="switchTab('reflexion')" class="nav-btn px-4 py-2 transition"><i class="fas fa-lightbulb mr-1"></i>Reflexion</button>
-        </div>
-    </nav>
-
-    <main class="container mx-auto p-4 md:p-8 my-8">
-        <!-- THEORIE -->
-        <div id="theorie" class="tab-content active">
-            <div class="card p-8 mb-6">
-                <h2 class="text-3xl mb-6 border-b-2 pb-3"><i class="fas fa-book-open text-blue-600 mr-3"></i>1. Theoretischer Rahmen</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="text-gray-700">
-                        <p class="mb-4"><span class="glossary-term">Ulrich Schneckener<span class="glossary-popup">Deutscher Politikwissenschaftler, Experte für fragile Staatlichkeit</span></span> unterscheidet drei Dimensionen:</p>
-                        <p class="mb-4"><strong><span class="highlight-yellow">Sicherheit</span></strong>: Gewaltmonopol und Schutz der Bürger. Erosion führt zu rechtsfreien Räumen.</p>
-                        <p class="mb-4"><strong><span class="highlight-green">Wohlfahrt</span></strong>: Bereitstellung öffentlicher Güter (Infrastruktur, Bildung, Gesundheit).</p>
-                        <p class="mb-4"><strong><span class="highlight-blue">Legitimität</span></strong>: Akzeptanz der Herrschaftsordnung und Partizipationsmöglichkeiten.</p>
-                        <p>Fragile Staatlichkeit: <span class="glossary-term">Weak State<span class="glossary-popup">Schwache Staaten mit eingeschränkter Funktionalität</span></span> → <span class="glossary-term">Failing State<span class="glossary-popup">Scheiternde Staaten</span></span> → <span class="glossary-term">Collapsed State<span class="glossary-popup">Kollabierte Staaten</span></span></p>
-                    </div>
-                    <div class="student-work">
-                        <h3 class="font-bold mb-4"><i class="fas fa-pencil-alt text-blue-600 mr-2"></i>Ihre Definitionen</h3>
-                        <label class="block text-sm font-semibold mb-2">1. Sicherheit</label>
-                        <textarea id="input-security" class="w-full h-24 p-3 border-2 rounded-lg mb-4" placeholder="Ihre Definition..."></textarea>
-                        <div class="char-counter" id="counter-security">0 Zeichen</div>
-                        
-                        <label class="block text-sm font-semibold mb-2 mt-4">2. Wohlfahrt</label>
-                        <textarea id="input-welfare" class="w-full h-24 p-3 border-2 rounded-lg mb-4" placeholder="Ihre Definition..."></textarea>
-                        <div class="char-counter" id="counter-welfare">0 Zeichen</div>
-                        
-                        <label class="block text-sm font-semibold mb-2 mt-4">3. Legitimität</label>
-                        <textarea id="input-legitimacy" class="w-full h-24 p-3 border-2 rounded-lg mb-4" placeholder="Ihre Definition..."></textarea>
-                        <div class="char-counter" id="counter-legitimacy">0 Zeichen</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- HAITI -->
-        <div id="haiti" class="tab-content">
-            <div class="card p-8 mb-6">
-                <h2 class="text-3xl mb-6 border-b-2 pb-3"><i class="fas fa-globe-americas text-red-600 mr-3"></i>2. Fallstudie Haiti</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 no-print">
-                    <div class="card p-4 bg-red-50 border-l-4 border-red-500">
-                        <h4 class="font-bold text-red-800 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Sicherheit</h4>
-                        <p class="text-sm text-red-700">G9-Banden kontrollieren 60% von Port-au-Prince</p>
-                    </div>
-                    <div class="card p-4 bg-yellow-50 border-l-4 border-yellow-500">
-                        <h4 class="font-bold text-yellow-800 mb-2"><i class="fas fa-users mr-2"></i>Humanitäre Krise</h4>
-                        <p class="text-sm text-yellow-700">4,9 Mio. Menschen leiden unter Hunger</p>
-                    </div>
-                    <div class="card p-4 bg-blue-50 border-l-4 border-blue-500">
-                        <h4 class="font-bold text-blue-800 mb-2"><i class="fas fa-landmark mr-2"></i>Politik</h4>
-                        <p class="text-sm text-blue-700">Keine Wahlen seit 2021</p>
-                    </div>
-                </div>
-
-                <div class="aspect-video bg-black rounded-xl mb-8 no-print">
-                    <iframe class="w-full h-full rounded-xl" src="https://www.youtube-nocookie.com/embed/EIjU8GLWVN0" frameborder="0" allowfullscreen></iframe>
-                </div>
-
-                <p class="mb-4 text-gray-700">Seit der Ermordung von Präsident <span class="glossary-term">Jovenel Moïse<span class="glossary-popup">Haitianischer Präsident, ermordet 7. Juli 2021</span></span> 2021 herrscht faktische Anarchie. Die "<span class="glossary-term">G9<span class="glossary-popup">Mächtiges Bündnis krimineller Gangs</span></span>" kontrolliert Territorien, erhebt "Steuern" und reguliert Ressourcenzugang. Die <span class="glossary-term">PNH<span class="glossary-popup">Police Nationale d'Haïti</span></span> ist machtlos. Humanitäre Katastrophe: Hunger, Cholera, kollabiertes Gesundheitssystem.</p>
-
-                <div class="bg-yellow-50 p-6 rounded-xl border-2 border-yellow-300 student-work">
-                    <h3 class="font-bold mb-3"><i class="fas fa-sticky-note text-yellow-600 mr-2"></i>Notizen</h3>
-                    <textarea id="input-haiti-notes" class="w-full h-48 p-4 border-2 rounded-lg bg-white" placeholder="Ihre Beobachtungen..."></textarea>
-                    <div class="char-counter" id="counter-haiti-notes">0 Zeichen</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ANALYSE -->
-        <div id="analyse" class="tab-content">
-            <div class="card p-8 mb-6">
-                <h2 class="text-3xl mb-6 border-b-2 pb-3"><i class="fas fa-chart-line text-green-600 mr-3"></i>3. Analyse Haiti</h2>
-                
-                <div class="overflow-x-auto mb-8 student-work">
-                    <table class="min-w-full bg-white border-2 rounded-lg">
-                        <thead class="bg-gray-100">
-                            <tr>
-                                <th class="py-3 px-4 text-left">Dimension</th>
-                                <th class="py-3 px-4 text-left">Status</th>
-                                <th class="py-3 px-4 text-left">Belege</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold">Gewaltmonopol</td>
-                                <td class="py-3 px-4">
-                                    <select id="select-security" class="w-full p-2 border rounded">
-                                        <option value="">Wählen...</option>
-                                        <option value="intakt">✓ Intakt</option>
-                                        <option value="eingeschraenkt">⚠ Eingeschränkt</option>
-                                        <option value="erodiert">✗ Erodiert</option>
-                                    </select>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <textarea id="analyze-security" class="w-full h-24 p-2 border rounded" placeholder="Belege..."></textarea>
-                                    <div class="char-counter" id="counter-analyze-security">0 Z</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold">Wohlfahrt</td>
-                                <td class="py-3 px-4">
-                                    <select id="select-welfare" class="w-full p-2 border rounded">
-                                        <option value="">Wählen...</option>
-                                        <option value="intakt">✓ Intakt</option>
-                                        <option value="eingeschraenkt">⚠ Eingeschränkt</option>
-                                        <option value="erodiert">✗ Erodiert</option>
-                                    </select>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <textarea id="analyze-welfare" class="w-full h-24 p-2 border rounded" placeholder="Belege..."></textarea>
-                                    <div class="char-counter" id="counter-analyze-welfare">0 Z</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold">Legitimität</td>
-                                <td class="py-3 px-4">
-                                    <select id="select-legitimacy" class="w-full p-2 border rounded">
-                                        <option value="">Wählen...</option>
-                                        <option value="intakt">✓ Intakt</option>
-                                        <option value="eingeschraenkt">⚠ Eingeschränkt</option>
-                                        <option value="erodiert">✗ Erodiert</option>
-                                    </select>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <textarea id="analyze-legitimacy" class="w-full h-24 p-2 border rounded" placeholder="Belege..."></textarea>
-                                    <div class="char-counter" id="counter-analyze-legitimacy">0 Z</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="card p-6 bg-blue-50 student-work">
-                    <h3 class="font-bold mb-3">Klassifikation</h3>
-                    <p class="text-sm mb-4">Ordnen Sie Haiti ein: Weak / Failing / Collapsed State?</p>
-                    <textarea id="input-synthesis" class="w-full h-40 p-4 border-2 rounded-lg bg-white" placeholder="Haiti ist ein ... weil..."></textarea>
-                    <div class="char-counter" id="counter-synthesis">0 Zeichen</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- VERGLEICH -->
-        <div id="vergleich" class="tab-content">
-            <div class="card p-8 mb-6">
-                <h2 class="text-3xl mb-6 border-b-2 pb-3"><i class="fas fa-balance-scale text-purple-600 mr-3"></i>4. Vergleich: Haiti & Somalia</h2>
-                
-                <div class="bg-orange-50 p-6 rounded-lg mb-8">
-                    <h3 class="font-bold mb-3">Hintergrund Somalia</h3>
-                    <p class="text-sm">Somalia: Seit 1991 <em>collapsed state</em>. Warlords, Al-Shabaab kontrollieren Gebiete. Somaliland faktisch unabhängig. AMISOM stützt schwache Regierung. Chronischer Hunger, Dürren.</p>
-                </div>
-
-                <div class="overflow-x-auto mb-8 student-work">
-                    <table class="min-w-full bg-white border">
-                        <thead class="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-                            <tr>
-                                <th class="py-3 px-4 text-left">Dimension</th>
-                                <th class="py-3 px-4 text-left">Haiti</th>
-                                <th class="py-3 px-4 text-left">Somalia</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="py-3 px-4 font-bold">Sicherheit</td>
-                                <td class="py-3 px-4">
-                                    <textarea id="comp-haiti-sec" class="w-full h-24 p-2 border rounded" placeholder="Haiti..."></textarea>
-                                    <div class="char-counter" id="counter-comp-haiti-sec">0 Z</div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <textarea id="comp-somalia-sec" class="w-full h-24 p-2 border rounded" placeholder="Somalia..."></textarea>
-                                    <div class="char-counter" id="counter-comp-somalia-sec">0 Z</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-bold">Wohlfahrt</td>
-                                <td class="py-3 px-4">
-                                    <textarea id="comp-haiti-welf" class="w-full h-24 p-2 border rounded" placeholder="Haiti..."></textarea>
-                                    <div class="char-counter" id="counter-comp-haiti-welf">0 Z</div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <textarea id="comp-somalia-welf" class="w-full h-24 p-2 border rounded" placeholder="Somalia..."></textarea>
-                                    <div class="char-counter" id="counter-comp-somalia-welf">0 Z</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-bold">Legitimität</td>
-                                <td class="py-3 px-4">
-                                    <textarea id="comp-haiti-leg" class="w-full h-24 p-2 border rounded" placeholder="Haiti..."></textarea>
-                                    <div class="char-counter" id="counter-comp-haiti-leg">0 Z</div>
-                                </td>
-                                <td class="py-3 px-4">
-                                    <textarea id="comp-somalia-leg" class="w-full h-24 p-2 border rounded" placeholder="Somalia..."></textarea>
-                                    <div class="char-counter" id="counter-comp-somalia-leg">0 Z</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="card p-6 bg-purple-50 student-work">
-                    <h3 class="font-bold mb-3">Synthese</h3>
-                    <p class="text-sm mb-4">Gemeinsamkeiten und Unterschiede? Welches Land ist fragiler?</p>
-                    <textarea id="input-comparison" class="w-full h-40 p-4 border-2 rounded-lg bg-white" placeholder="Beide Länder..."></textarea>
-                    <div class="char-counter" id="counter-comparison">0 Zeichen</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TRANSFER -->
-        <div id="transfer" class="tab-content">
-            <div class="card p-8 mb-6">
-                <h2 class="text-3xl mb-6 border-b-2 pb-3"><i class="fas fa-chess text-indigo-600 mr-3"></i>5. Transfer: Interventionsszenarien</h2>
-                
-                <p class="mb-6 text-gray-700">Sie sind UN-Beauftragt für Haiti. Welche Intervention würden Sie empfehlen?</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 no-print">
-                    <div class="card p-4 border-2 border-gray-300 hover:border-blue-500 transition cursor-pointer">
-                        <h4 class="font-bold mb-2"><i class="fas fa-shield-alt text-blue-600 mr-2"></i>A: Militär-Intervention</h4>
-                        <p class="text-sm text-gray-700">Friedenstruppen zur Entwaffnung der Gangs</p>
-                        <p class="text-xs mt-2"><strong>Pro:</strong> Schnell | <str            transform: translateY(0);
-        }
-
-        /* Druck-Optimierung */
-        @media print {
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            
-            .no-print {
-                display: none !important;
-            }
-
-            .tab-content {
-                display: block !important;
-                page-break-after: always;
-                page-break-inside: avoid;
-            }
-
-            .tab-content:last-child {
-                page-break-after: auto;
-            }
-
-            /* Inputs im Druck sichtbar mit Inhalt */
-            textarea, select {
-                border: 1px solid #ccc !important;
-                background: white !important;
-                color: black !important;
-                font-size: 11pt !important;
-                line-height: 1.4 !important;
-                padding: 8px !important;
-                page-break-inside: avoid;
-            }
-
-            textarea {
-                min-height: 100px !important;
-                height: auto !important;
-                overflow: visible !important;
-                white-space: pre-wrap !important;
-                word-wrap: break-word !important;
-            }
-
-            select {
-                -webkit-appearance: none;
-                appearance: none;
-                background: white !important;
-                padding-right: 20px !important;
-            }
-
-            /* Print selected option value */
-            select::after {
-                content: attr(data-selected);
-            }
-
-            table {
-                page-break-inside: avoid;
-            }
-
-            .container {
-                width: 100% !important;
-                max-width: 100% !important;
-                padding: 20px !important;
-                margin: 0 !important;
-            }
-
-            .card {
-                box-shadow: none !important;
-                border: 1px solid #ddd !important;
-                page-break-inside: avoid;
-            }
-
-            h2, h3 {
-                page-break-after: avoid;
-            }
-
-            .academic-text {
-                column-count: 1 !important;
-            }
-
-            /* Print-only headers */
-            .print-header {
-                display: block !important;
-                text-align: center;
-                margin-bottom: 30px;
-                padding-bottom: 15px;
-                border-bottom: 2px solid #333;
-            }
-
-            .print-header h1 {
-                font-size: 20pt;
-                margin-bottom: 10px;
-            }
-
-            .print-header p {
-                font-size: 12pt;
-                color: #666;
-            }
-        }
-
-        .print-header {
-            display: none;
-        }
-
-        /* Improved Slider */
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-track {
-            background: linear-gradient(90deg, #ef4444, #10b981);
-            height: 8px;
-            border-radius: 4px;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: white;
-            border: 3px solid #3b82f6;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            margin-top: -8px;
-        }
-
-        input[type="range"]::-moz-range-track {
-            background: linear-gradient(90deg, #ef4444, #10b981);
-            height: 8px;
-            border-radius: 4px;
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: white;
-            border: 3px solid #3b82f6;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #1f2937;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.875rem;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        /* Character counter */
-        .char-counter {
-            font-size: 0.75rem;
-            color: #6b7280;
-            text-align: right;
-            margin-top: 4px;
-        }
-
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-    </style>
-</head>
-<body class="flex flex-col min-h-screen">
-
-    <!-- Progress Indicator -->
-    <div class="progress-indicator no-print" id="progress-bar" style="width: 0%"></div>
-
-    <!-- Save Indicator -->
-    <div class="save-indicator" id="save-indicator">
-        <i class="fas fa-check-circle mr-2"></i>Automatisch gespeichert
+<body class="bg-gray-50">
+    <div id="save-indicator" class="save-indicator">
+        <i class="fas fa-check mr-2"></i>Autom. gespeichert
     </div>
 
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 shadow-lg no-print">
-        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-                <h1 class="text-3xl font-bold mb-1">Politik und Gesellschaft Q12</h1>
-                <p class="text-slate-300 text-sm flex items-center">
-                    <i class="fas fa-graduation-cap mr-2"></i>
-                    Leistungsniveau: Erhöhtes Anforderungsniveau
-                </p>
+    <header class="bg-slate-900 text-white p-6 shadow-xl no-print relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+            <i class="fas fa-globe-americas text-9xl"></i>
+        </div>
+        <div class="container mx-auto relative z-10">
+            <div class="flex items-center gap-4 mb-2">
+                <span class="bg-blue-600 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Oberstufe Q12</span>
+                <span class="bg-red-600 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Politik & Gesellschaft</span>
             </div>
-            <div class="text-center md:text-right">
-                <span class="block text-sm font-light text-slate-300">Thema:</span>
-                <span class="font-bold text-xl text-red-400">Fragile Staatlichkeit: Haiti</span>
-            </div>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">Fragile Staatlichkeit: Analyse & Transfer</h1>
+            <p class="text-slate-300 max-w-2xl">Ein interaktives Lernmodul zur Analyse staatlicher Erosionsprozesse am Beispiel von Haiti und Somalia. Ziel: Entwicklung fundierter Urteilskompetenz.</p>
         </div>
     </header>
 
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-50 no-print">
-        <div class="container mx-auto flex flex-wrap justify-center gap-2 md:gap-8 px-4">
-            <button onclick="switchTab('theorie')" class="nav-btn active py-4 px-4 md:px-2 text-sm md:text-base transition">
-                <i class="fas fa-book mr-2"></i>1. Theoretischer Rahmen
-            </button>
-            <button onclick="switchTab('fallstudie')" class="nav-btn py-4 px-4 md:px-2 text-sm md:text-base transition">
-                <i class="fas fa-globe-americas mr-2"></i>2. Fallstudie Haiti
-            </button>
-            <button onclick="switchTab('transfer')" class="nav-btn py-4 px-4 md:px-2 text-sm md:text-base transition">
-                <i class="fas fa-chart-line mr-2"></i>3. Transfer & Analyse
-            </button>
-            <button onclick="switchTab('reflexion')" class="nav-btn py-4 px-4 md:px-2 text-sm md:text-base transition">
-                <i class="fas fa-lightbulb mr-2"></i>4. Reflexion
-            </button>
+    <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-gray-200 no-print">
+        <div class="container mx-auto px-4 overflow-x-auto">
+            <div class="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-2 py-3 min-w-max">
+                <button onclick="switchTab('start')" class="nav-btn active px-4 py-2 text-sm rounded-lg flex items-center gap-2">
+                    <i class="fas fa-map-signs"></i> Start
+                </button>
+                <button onclick="switchTab('theorie')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
+                    <i class="fas fa-book"></i> 1. Theorie
+                </button>
+                <button onclick="switchTab('haiti')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
+                    <i class="fas fa-search-location"></i> 2. Fallstudie Haiti
+                </button>
+                <button onclick="switchTab('analyse')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
+                    <i class="fas fa-microscope"></i> 3. Analyse
+                </button>
+                <button onclick="switchTab('vergleich')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
+                    <i class="fas fa-balance-scale"></i> 4. Vergleich
+                </button>
+                <button onclick="switchTab('transfer')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
+                    <i class="fas fa-chess-knight"></i> 5. Transfer
+                </button>
+                <button onclick="switchTab('quellen')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
+                    <i class="fas fa-pen-nib"></i> 6. Textanalyse
+                </button>
+                <button onclick="switchTab('reflexion')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
+                    <i class="fas fa-flag-checkered"></i> Abschluss
+                </button>
+            </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="container mx-auto p-4 md:p-8 flex-grow my-8">
-
-        <!-- Print Header (nur im Druck sichtbar) -->
+    <main class="container mx-auto p-4 md:p-8 max-w-6xl">
+        
         <div class="print-header">
-            <h1>Q12 Politik und Gesellschaft</h1>
-            <p>Fallstudie: Fragile Staatlichkeit am Beispiel Haiti</p>
-            <p style="font-size: 10pt; margin-top: 10px;">Name: __________________ | Datum: __________________</p>
+            <h1>Lernportfolio: Fragile Staatlichkeit</h1>
+            <p><strong>Thema:</strong> Haiti & Somalia | <strong>Schüler:</strong> _______________________</p>
         </div>
 
-        <!-- TAB 1: THEORIE -->
-        <div id="theorie" class="tab-content active">
-            <div class="card p-6 md:p-8 mb-6">
-                <h2 class="text-3xl font-serif text-slate-800 mb-6 border-b-2 border-slate-200 pb-3 flex items-center">
-                    <i class="fas fa-book-open text-blue-600 mr-3"></i>
-                    1. Das Konzept fragiler Staatlichkeit
-                </h2>
-                
-                <div class="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500 p-5 mb-8 rounded-r-lg no-print">
-                    <h3 class="font-bold text-blue-900 text-lg mb-2">
-                        <i class="fas fa-tasks mr-2"></i>Arbeitsauftrag
-                    </h3>
-                    <p class="text-blue-800">
-                        Erarbeiten Sie aus dem folgenden Fachtext die drei zentralen Dimensionen staatlicher Herrschaft nach Schneckener heraus. Definieren Sie diese in eigenen Worten in der untenstehenden Eingabemaske.
-                    </p>
+        <div id="start" class="tab-content active">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                <div class="lg:col-span-2">
+                    <div class="card p-8 bg-gradient-to-br from-white to-blue-50">
+                        <h2 class="text-2xl font-bold mb-4 text-slate-800">Willkommen zum Lernmodul</h2>
+                        <p class="mb-4 text-gray-700 leading-relaxed">
+                            Dieses digitale Arbeitsblatt führt Sie systematisch durch die komplexe Thematik fragiler Staatlichkeit. 
+                            Anders als bei klassischen Aufgabenstellungen speichern Sie hier Ihre Fortschritte direkt im Browser.
+                        </p>
+                        <div class="bg-blue-100 border-l-4 border-blue-600 p-4 mb-6 rounded-r">
+                            <p class="text-sm text-blue-800">
+                                <strong>Hinweis zur Nutzung:</strong> Ihre Eingaben werden automatisch lokal gespeichert. 
+                                Nutzen Sie am Ende die PDF-Funktion, um Ihr persönliches Lernportfolio zu sichern.
+                            </p>
+                        </div>
+                        <h3 class="font-bold text-lg mb-3">Lernziele dieser Einheit:</h3>
+                        <ul class="list-none space-y-2 mb-4">
+                            <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Das Drei-Dimensionen-Modell (Schneckener) anwenden.</li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Ursachen und Folgen staatlicher Erosion in Haiti analysieren.</li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Vergleichende Analyse mit dem Fallbeispiel Somalia.</li>
+                            <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Handlungsoptionen internationaler Akteure beurteilen (Urteilskompetenz).</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Lesetext -->
-                    <article class="academic-text text-slate-700 card p-6 informational-text">
-                        <h3 class="text-xl font-bold mb-4 text-slate-800">Theoretischer Hintergrund</h3>
-                        <p>
-                            Die politikwissenschaftliche Auseinandersetzung mit dem Phänomen der fragilen Staatlichkeit erfordert zunächst eine präzise Definition dessen, was einen funktionierenden Staat im modernen Sinne konstituiert. In Anlehnung an das Weber'sche Modell wird Staatlichkeit primär über das legitime Monopol physischer Gewaltsamkeit definiert. Ulrich Schneckener erweitert diesen Ansatz jedoch um eine funktionale Perspektive und unterscheidet drei elementare Dimensionen: Sicherheit, Wohlfahrt und Legitimität.
-                        </p>
-                        <p>
-                            Ein Staat gilt als konsolidiert, wenn er in der Lage ist, diese drei Kernfunktionen flächendeckend zu gewährleisten. Die <strong>Sicherheitsfunktion</strong> (Gewaltmonopol) impliziert die Kontrolle des Staatsgebiets und den Schutz der Bürger vor physischer Gewalt, sowohl durch interne als auch externe Akteure. Die Erosion dieser Funktion führt zu rechtsfreien Räumen, in denen nicht-staatliche Gewaltakteure (Warlords, Milizen, kriminelle Netzwerke) die Herrschaft übernehmen.
-                        </p>
-                        <p>
-                            Die <strong>Wohlfahrtsfunktion</strong> bezieht sich auf die Fähigkeit des Staates, grundlegende öffentliche Güter und Dienstleistungen bereitzustellen. Hierzu zählen Infrastruktur, Bildung, Gesundheitsversorgung sowie Mechanismen zur sozioökonomischen Umverteilung. Ein Versagen in diesem Bereich untergräbt den Gesellschaftsvertrag, da der Staat seiner Fürsorgepflicht gegenüber dem Souverän – dem Volk – nicht nachkommt.
-                        </p>
-                        <p>
-                            Schließlich ist die <strong>Legitimitätsfunktion</strong> entscheidend für die Stabilität eines politischen Gemeinwesens. Sie beschreibt die Akzeptanz der Herrschaftsordnung durch die Bevölkerung sowie die Partizipationsmöglichkeiten innerhalb des politischen Systems. Fehlt diese Akzeptanz, beispielsweise durch Korruption, Wahlmanipulation oder die systematische Exklusion bestimmter Bevölkerungsgruppen, verliert der Staat seine moralische und politische Autorität. Fragile Staatlichkeit ist somit kein binärer Zustand, sondern ein Kontinuum, das von "weak states" über "failing states" bis hin zu "collapsed states" reicht, in denen staatliche Strukturen vollends implodiert sind.
-                        </p>
-                    </article>
+                <div class="card p-6 roadmap-container">
+                    <h3 class="text-xl font-bold mb-6 text-center text-slate-700">Ihr Lernpfad</h3>
+                    <div class="pl-4">
+                        <div class="roadmap-step">
+                            <div class="roadmap-marker"></div>
+                            <h4 class="font-bold text-slate-800">1. Theorie</h4>
+                            <p class="text-xs text-gray-500">Konzepte verstehen</p>
+                        </div>
+                        <div class="roadmap-step">
+                            <div class="roadmap-marker"></div>
+                            <h4 class="font-bold text-slate-800">2. Datenerhebung</h4>
+                            <p class="text-xs text-gray-500">Fallstudie Haiti & Statistik</p>
+                        </div>
+                        <div class="roadmap-step">
+                            <div class="roadmap-marker"></div>
+                            <h4 class="font-bold text-slate-800">3. Diagnose</h4>
+                            <p class="text-xs text-gray-500">Anwendung des Modells</p>
+                        </div>
+                        <div class="roadmap-step">
+                            <div class="roadmap-marker"></div>
+                            <h4 class="font-bold text-slate-800">4. Kontextualisierung</h4>
+                            <p class="text-xs text-gray-500">Vergleich mit Somalia</p>
+                        </div>
+                        <div class="roadmap-step">
+                            <div class="roadmap-marker"></div>
+                            <h4 class="font-bold text-slate-800">5. Lösungssuche</h4>
+                            <p class="text-xs text-gray-500">Interventionsszenarien</p>
+                        </div>
+                        <div class="roadmap-step">
+                            <div class="roadmap-marker" style="border-color: #10b981;"></div>
+                            <h4 class="font-bold text-green-700">ZIEL: Urteil</h4>
+                            <p class="text-xs text-gray-500">Reflexion & Fazit</p>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('theorie')" class="w-full mt-4 bg-primary text-white bg-blue-700 hover:bg-blue-800 font-bold py-2 px-4 rounded transition text-sm">
+                        Starten <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-                    <!-- Schülerarbeit -->
-                    <div class="card p-6 bg-gradient-to-br from-gray-50 to-white student-work">
-                        <h3 class="text-xl font-bold mb-4 text-slate-800 flex items-center">
-                            <i class="fas fa-pencil-alt text-blue-600 mr-2"></i>
-                            Exzerpt: Dimensionen der Staatlichkeit
-                        </h3>
+        <div id="theorie" class="tab-content">
+            <div class="card p-8">
+                <h2 class="text-3xl mb-6 border-b pb-2 text-slate-800">1. Theoretischer Rahmen: Staatlichkeit</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="text-gray-700 leading-relaxed text-justify">
+                        <p class="mb-4">
+                            Um das Phänomen fragiler Staatlichkeit politikwissenschaftlich zu erfassen, dient das <strong>Drei-Säulen-Modell</strong> nach Ulrich Schneckener als analytische Matrix. Es operationalisiert Staatlichkeit in drei funktionalen Dimensionen:
+                        </p>
                         
                         <div class="mb-6">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                                <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2 text-xs">1</span>
-                                Sicherheitsfunktion (Gewaltmonopol)
-                            </label>
-                            <textarea 
-                                id="input-security" 
-                                class="w-full h-32 p-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none" 
-                                placeholder="Ihre Definition in eigenen Worten..."></textarea>
-                            <div class="char-counter" id="counter-security">0 Zeichen</div>
+                            <h4 class="font-bold text-blue-900 flex items-center gap-2"><i class="fas fa-shield-alt"></i> 1. Sicherheitsfunktion (Gewaltmonopol)</h4>
+                            <p class="text-sm mt-1">
+                                Der Staat besitzt das <span class="glossary-term">Monopol physischer Gewaltsamkeit<span class="glossary-popup">Definition nach Max Weber: Nur der Staat darf legitim Zwang ausüben.</span></span>. Er garantiert die physische Unversehrtheit der Bürger nach innen (Rechtsdurchsetzung) und außen (Verteidigung). <br><em>Erosion führt zu: Warlordism, Milizenherrschaft, Bürgerkrieg.</em>
+                            </p>
                         </div>
-                        
+
                         <div class="mb-6">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                                <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2 text-xs">2</span>
-                                Wohlfahrtsfunktion (Daseinsvorsorge)
-                            </label>
-                            <textarea 
-                                id="input-welfare" 
-                                class="w-full h-32 p-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none" 
-                                placeholder="Ihre Definition in eigenen Worten..."></textarea>
-                            <div class="char-counter" id="counter-welfare">0 Zeichen</div>
+                            <h4 class="font-bold text-green-800 flex items-center gap-2"><i class="fas fa-hands-holding-circle"></i> 2. Wohlfahrtsfunktion (Daseinsvorsorge)</h4>
+                            <p class="text-sm mt-1">
+                                Bereitstellung öffentlicher Güter (Infrastruktur, Bildung, Gesundheit) und Mechanismen zur sozioökonomischen Umverteilung. Dies bildet die materielle Basis des Gesellschaftsvertrags.<br><em>Erosion führt zu: Humanitären Krisen, absoluter Armut, Schattenwirtschaft.</em>
+                            </p>
                         </div>
+
+                        <div class="mb-6">
+                            <h4 class="font-bold text-purple-800 flex items-center gap-2"><i class="fas fa-gavel"></i> 3. Legitimitätsfunktion (Rechtsstaat)</h4>
+                            <p class="text-sm mt-1">
+                                Partizipation, Rechtsstaatlichkeit und die Akzeptanz der Herrschaftsform durch die Bevölkerung. Legitimität erzeugt Loyalität.<br><em>Erosion führt zu: Korruption, Wahlmanipulation, politischer Apathie oder Aufstand.</em>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="student-work bg-gray-50 p-6 rounded-xl border border-gray-200">
+                        <h3 class="font-bold mb-4 text-slate-700"><i class="fas fa-pen text-blue-500 mr-2"></i>Ihre Definitionen</h3>
+                        <p class="text-xs text-gray-500 mb-4">Formulieren Sie in eigenen Worten, woran man das Scheitern der jeweiligen Dimension erkennt.</p>
                         
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                                <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2 text-xs">3</span>
-                                Legitimitätsfunktion (Rechtsstaatlichkeit/Partizipation)
-                            </label>
-                            <textarea 
-                                id="input-legitimacy" 
-                                class="w-full h-32 p-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none" 
-                                placeholder="Ihre Definition in eigenen Worten..."></textarea>
-                            <div class="char-counter" id="counter-legitimacy">0 Zeichen</div>
-                        </div>
+                        <label class="block text-sm font-semibold mb-1 text-blue-900">Indikatoren für Sicherheitsverlust:</label>
+                        <textarea id="def-security" class="w-full h-20 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition mb-4 resize-none" placeholder="z.B. Auftreten privater Milizen..."></textarea>
+                        
+                        <label class="block text-sm font-semibold mb-1 text-green-900">Indikatoren für Wohlfahrtsverlust:</label>
+                        <textarea id="def-welfare" class="w-full h-20 p-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition mb-4 resize-none" placeholder="z.B. Zusammenbruch der Versorgung..."></textarea>
+                        
+                        <label class="block text-sm font-semibold mb-1 text-purple-900">Indikatoren für Legitimitätsverlust:</label>
+                        <textarea id="def-legitimacy" class="w-full h-20 p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition resize-none" placeholder="z.B. Boykott von Wahlen..."></textarea>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 2: FALLSTUDIE HAITI -->
-        <div id="fallstudie" class="tab-content">
-            <div class="card p-6 md:p-8 mb-6">
-                <h2 class="text-3xl font-serif text-slate-800 mb-6 border-b-2 border-slate-200 pb-3 flex items-center">
-                    <i class="fas fa-globe-americas text-red-600 mr-3"></i>
-                    2. Fallstudie: Die Republik Haiti
-                </h2>
+        <div id="haiti" class="tab-content">
+            <div class="card p-8">
+                <h2 class="text-3xl mb-6 border-b pb-2 text-red-700">2. Fallstudie: Die Situation in Haiti</h2>
                 
-                <div class="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-500 p-5 mb-8 rounded-r-lg no-print">
-                    <h3 class="font-bold text-blue-900 text-lg mb-2">
-                        <i class="fas fa-video mr-2"></i>Videoanalyse & Recherche
-                    </h3>
-                    <p class="text-blue-800">
-                        Sehen Sie sich die verlinkten Inhalte an und lesen Sie den Fachtext. Identifizieren Sie konkrete Ereignisse, die auf ein Staatsversagen hindeuten.
-                    </p>
-                </div>
+                <div class="bg-slate-100 rounded-xl p-6 mb-8 chart-visuals">
+                    <h3 class="text-lg font-bold mb-4 text-slate-700"><i class="fas fa-chart-bar mr-2"></i>Statistisches Dossier (Vergleichswerte)</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span><strong>HDI (Human Development Index)</strong></span>
+                                <span class="text-gray-500">Max: 1.0</span>
+                            </div>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1"><span>Deutschland</span><span>0.94</span></div>
+                                    <div class="bar-container"><div class="bar-fill bg-blue-500" style="width: 94%">DE</div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1"><span>Dominikanische Rep. (Nachbar)</span><span>0.76</span></div>
+                                    <div class="bar-container"><div class="bar-fill bg-green-500" style="width: 76%">DOM</div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1"><span>Haiti</span><span>0.53</span></div>
+                                    <div class="bar-container"><div class="bar-fill bg-red-600" style="width: 53%">HAI</div></div>
+                                </div>
+                            </div>
+                        </div>
 
-                <!-- Video -->
-                <div class="w-full aspect-video bg-black rounded-xl shadow-2xl mb-8 overflow-hidden no-print video-container">
-                    <iframe 
-                        class="w-full h-full" 
-                        src="https://www.youtube-nocookie.com/embed/EIjU8GLWVN0?si=L4y-wZkH2xPz5w7e" 
-                        title="Haiti Reportage" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span><strong>Fragile States Index (2023)</strong></span>
+                                <span class="text-gray-500">Max Instabilität: 120</span>
+                            </div>
+                             <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1"><span>Somalia</span><span>111.9 (Sehr kritisch)</span></div>
+                                    <div class="bar-container"><div class="bar-fill bg-purple-800" style="width: 93%">SOM</div></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1"><span>Haiti</span><span>102.9 (Kritisch)</span></div>
+                                    <div class="bar-container"><div class="bar-fill bg-red-600" sty

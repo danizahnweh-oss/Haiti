@@ -1,608 +1,793 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Q12 PuG: Fragile Staatlichkeit - Advanced Module</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Roboto:wght@300;400;500;700&display=swap');
-        
-        :root {
-            --primary: #1e3a8a; /* Dunkelblau */
-            --secondary: #dc2626; /* Rot */
-            --accent: #10b981; /* Grün */
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q12 PuG: Fragile Staatlichkeit - Advanced Module</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Source+Sans+3:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&display=swap');
 
-        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); color: #1f2937; }
-        h1, h2, h3, h4 { font-family: 'Merriweather', serif; }
-        
-        /* Tab Animationen */
-        .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Navigation */
-        .nav-btn { position: relative; opacity: 0.7; transition: all 0.3s; }
-        .nav-btn:hover { opacity: 1; background-color: rgba(255,255,255,0.5); }
-        .nav-btn.active { opacity: 1; color: var(--primary); font-weight: 700; background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-radius: 8px; }
-        .nav-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 10%; width: 80%; height: 3px; background: var(--primary); border-radius: 2px; }
+:root {
+    --primary: #1e3a8a;
+    --secondary: #dc2626;
+    --accent: #10b981;
+    --text-dark: #1a1a2e;
+    --text-body: #2d3748;
+    --bg-warm: #faf8f5;
+    --bg-paper: #fffef9;
+    --border-subtle: #e8e4de;
+}
 
-        /* Karten & Elemente */
-        .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.05); }
-        .glossary-term { cursor: help; border-bottom: 2px dotted var(--primary); color: var(--primary); position: relative; font-weight: 500; }
-        .glossary-popup { display: none; position: absolute; background: #1e293b; color: white; padding: 12px; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 50; width: 250px; font-size: 0.85rem; line-height: 1.4; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 8px; }
-        .glossary-term:hover .glossary-popup { display: block; }
-        
-        /* Roadmap Styles */
-        .roadmap-step { position: relative; padding-left: 2rem; border-left: 3px solid #cbd5e1; padding-bottom: 2rem; }
-        .roadmap-step:last-child { border-left-color: transparent; }
-        .roadmap-marker { position: absolute; left: -11px; top: 0; width: 20px; height: 20px; border-radius: 50%; background: white; border: 4px solid var(--primary); transition: all 0.3s; }
-        .roadmap-step:hover .roadmap-marker { transform: scale(1.3); border-color: var(--secondary); }
+body { font-family: 'Source Sans 3', sans-serif; background: var(--bg-warm); color: var(--text-body); line-height: 1.7; }
+h1, h2, h3 { font-family: 'Merriweather', serif; color: var(--text-dark); }
+h4, h5 { font-family: 'Source Sans 3', sans-serif; font-weight: 700; }
 
-        /* Chart Styles */
-        .bar-container { background-color: #e2e8f0; border-radius: 9999px; overflow: hidden; height: 1.5rem; }
-        .bar-fill { height: 100%; display: flex; align-items: center; padding-left: 0.5rem; color: white; font-size: 0.75rem; font-weight: bold; transition: width 1s ease-in-out; }
+.tab-content { display: none; animation: fadeIn 0.5s ease-out; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Speichern Indikator */
-        .save-indicator { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 10px 20px; border-radius: 50px; opacity: 0; transition: opacity 0.3s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); z-index: 1000; font-weight: 600; font-size: 0.9rem; pointer-events: none; }
-        .save-indicator.show { opacity: 1; transform: translateY(-10px); }
+.nav-btn { position: relative; opacity: 0.65; transition: all 0.3s; font-family: 'Source Sans 3', sans-serif; }
+.nav-btn:hover { opacity: 1; background-color: rgba(255,255,255,0.6); }
+.nav-btn.active { opacity: 1; color: var(--primary); font-weight: 700; background-color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-radius: 8px; }
+.nav-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 10%; width: 80%; height: 3px; background: var(--primary); border-radius: 2px; }
 
-        /* Print Optimierung */
-        @media print {
-            body { background: white !important; color: black !important; }
-            .no-print, nav, header, footer, .roadmap-container, .chart-visuals { display: none !important; }
-            .tab-content { display: block !important; margin-bottom: 3rem; page-break-after: always; }
-            .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
-            textarea, select { border: 1px solid #000 !important; font-family: 'Courier New', monospace; font-size: 11pt; }
-            h2 { border-bottom: 2px solid black !important; }
-            /* Nur Schülereingaben und wichtige Textpassagen drucken */
-            .student-work { display: block !important; }
-            .print-header { display: block !important; margin-bottom: 20px; border-bottom: 2px solid black; padding-bottom: 10px; }
-        }
-        .print-header { display: none; }
-    </style>
+.card { background: var(--bg-paper); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); border: 1px solid var(--border-subtle); }
+
+/* Academic text styling */
+.academic-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05rem;
+    line-height: 1.85;
+    text-align: justify;
+    hyphens: auto;
+    color: #3a3a3a;
+}
+.academic-text p { margin-bottom: 1rem; text-indent: 1.5em; }
+.academic-text p:first-child { text-indent: 0; }
+.academic-text em { font-style: italic; }
+
+/* Dropdown / Details styling */
+details.material-dropdown {
+    background: linear-gradient(to bottom, #fdfdfc, #f8f7f4);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    margin-bottom: 1.25rem;
+    transition: all 0.3s;
+    overflow: hidden;
+}
+details.material-dropdown[open] {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    border-color: #c8c3ba;
+}
+details.material-dropdown summary {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    user-select: none;
+    list-style: none;
+    transition: background 0.2s;
+}
+details.material-dropdown summary::-webkit-details-marker { display: none; }
+details.material-dropdown summary::before {
+    content: '▸';
+    font-size: 0.9rem;
+    color: var(--primary);
+    transition: transform 0.3s;
+    display: inline-block;
+    min-width: 1em;
+}
+details.material-dropdown[open] summary::before { transform: rotate(90deg); }
+details.material-dropdown summary:hover { background: rgba(30,58,138,0.04); }
+details.material-dropdown .dropdown-content { padding: 0 1.5rem 1.5rem 1.5rem; }
+
+/* Source tag styling */
+.source-tag {
+    display: inline-block;
+    background: #e8e4de;
+    color: #6b5c4f;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+/* Link styling for external resources */
+.external-link {
+    display: block;
+    background: #f0f4f8;
+    border-left: 4px solid var(--primary);
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0;
+    border-radius: 0 8px 8px 0;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.9rem;
+    color: var(--primary);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.external-link:hover { background: #e2eaf4; transform: translateX(4px); }
+.external-link i { margin-right: 0.5rem; }
+
+/* Task styling */
+.task-block {
+    background: linear-gradient(135deg, #fefefe, #f9f8f5);
+    border: 2px solid #d4cfc7;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 1.25rem;
+}
+.task-block .task-label {
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+}
+.task-block .task-instruction {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-body);
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+/* Glossary */
+.glossary-term { cursor: help; border-bottom: 2px dotted var(--primary); color: var(--primary); position: relative; font-weight: 500; }
+.glossary-popup { display: none; position: absolute; background: #1e293b; color: white; padding: 12px; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 50; width: 280px; font-size: 0.85rem; line-height: 1.5; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 8px; font-family: 'Source Sans 3', sans-serif; }
+.glossary-term:hover .glossary-popup { display: block; }
+
+/* Roadmap */
+.roadmap-step { position: relative; padding-left: 2rem; border-left: 3px solid #cbd5e1; padding-bottom: 2rem; }
+.roadmap-step:last-child { border-left-color: transparent; }
+.roadmap-marker { position: absolute; left: -11px; top: 0; width: 20px; height: 20px; border-radius: 50%; background: white; border: 4px solid var(--primary); transition: all 0.3s; }
+.roadmap-step:hover .roadmap-marker { transform: scale(1.3); border-color: var(--secondary); }
+
+/* Bar charts */
+.bar-container { background-color: #e2e8f0; border-radius: 9999px; overflow: hidden; height: 1.5rem; }
+.bar-fill { height: 100%; display: flex; align-items: center; padding-left: 0.5rem; color: white; font-size: 0.75rem; font-weight: bold; transition: width 1s ease-in-out; }
+
+/* Save indicator */
+.save-indicator { position: fixed; bottom: 20px; right: 20px; background: #10b981; color: white; padding: 10px 20px; border-radius: 50px; opacity: 0; transition: opacity 0.3s, transform 0.3s; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); z-index: 1000; font-weight: 600; font-size: 0.9rem; pointer-events: none; }
+.save-indicator.show { opacity: 1; transform: translateY(-10px); }
+
+/* Textarea styling */
+textarea, select {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    border: 1px solid #d4cfc7;
+    border-radius: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+textarea:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(30,58,138,0.1);
+    outline: none;
+}
+
+/* Print */
+@media print {
+    body { background: white !important; color: black !important; }
+    .no-print, nav, header, footer, .roadmap-container, .chart-visuals { display: none !important; }
+    .tab-content { display: block !important; margin-bottom: 3rem; page-break-after: always; }
+    .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
+    details.material-dropdown { border: 1px solid #999; }
+    details.material-dropdown[open] .dropdown-content { display: block; }
+    textarea, select { border: 1px solid #000 !important; font-family: 'Courier New', monospace; font-size: 11pt; }
+    h2 { border-bottom: 2px solid black !important; }
+    .student-work { display: block !important; }
+    .print-header { display: block !important; margin-bottom: 20px; border-bottom: 2px solid black; padding-bottom: 10px; }
+}
+.print-header { display: none; }
+</style>
 </head>
-<body class="bg-gray-50">
-    <div id="save-indicator" class="save-indicator">
-        <i class="fas fa-check mr-2"></i>Autom. gespeichert
+<body>
+
+<div id="save-indicator" class="save-indicator">
+    <i class="fas fa-check mr-2"></i>Autom. gespeichert
+</div>
+
+<header class="bg-slate-900 text-white p-6 shadow-xl no-print relative overflow-hidden">
+    <div class="absolute top-0 right-0 p-4 opacity-10">
+        <i class="fas fa-globe-americas text-9xl"></i>
     </div>
-
-    <header class="bg-slate-900 text-white p-6 shadow-xl no-print relative overflow-hidden">
-        <div class="absolute top-0 right-0 p-4 opacity-10">
-            <i class="fas fa-globe-americas text-9xl"></i>
+    <div class="container mx-auto relative z-10">
+        <div class="flex items-center gap-4 mb-2">
+            <span class="bg-blue-600 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Oberstufe Q12</span>
+            <span class="bg-red-600 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Politik & Gesellschaft</span>
         </div>
-        <div class="container mx-auto relative z-10">
-            <div class="flex items-center gap-4 mb-2">
-                <span class="bg-blue-600 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Oberstufe Q12</span>
-                <span class="bg-red-600 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Politik & Gesellschaft</span>
-            </div>
-            <h1 class="text-3xl md:text-4xl font-bold mb-2">Fragile Staatlichkeit: Analyse & Transfer</h1>
-            <p class="text-slate-300 max-w-2xl">Ein interaktives Lernmodul zur Analyse staatlicher Erosionsprozesse am Beispiel von Haiti und Somalia. Ziel: Entwicklung fundierter Urteilskompetenz.</p>
-        </div>
-    </header>
+        <h1 class="text-3xl md:text-4xl font-bold mb-2" style="font-family: 'Merriweather', serif;">Fragile Staatlichkeit: Analyse & Transfer</h1>
+        <p class="text-slate-300 max-w-2xl" style="font-family: 'Source Sans 3', sans-serif;">Ein quellengestütztes Lernmodul zur eigenständigen Analyse staatlicher Erosionsprozesse. Erarbeiten Sie sich die Inhalte anhand wissenschaftlicher Texte, Primärquellen und weiterführender Materialien.</p>
+    </div>
+</header>
 
-    <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-gray-200 no-print">
-        <div class="container mx-auto px-4 overflow-x-auto">
-            <div class="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-2 py-3 min-w-max">
-                <button onclick="switchTab('start')" class="nav-btn active px-4 py-2 text-sm rounded-lg flex items-center gap-2">
-                    <i class="fas fa-map-signs"></i> Start
-                </button>
-                <button onclick="switchTab('theorie')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
-                    <i class="fas fa-book"></i> 1. Theorie
-                </button>
-                <button onclick="switchTab('haiti')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
-                    <i class="fas fa-search-location"></i> 2. Fallstudie Haiti
-                </button>
-                <button onclick="switchTab('analyse')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
-                    <i class="fas fa-microscope"></i> 3. Analyse
-                </button>
-                <button onclick="switchTab('vergleich')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
-                    <i class="fas fa-balance-scale"></i> 4. Vergleich
-                </button>
-                <button onclick="switchTab('transfer')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
-                    <i class="fas fa-chess-knight"></i> 5. Transfer
-                </button>
-                <button onclick="switchTab('quellen')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
-                    <i class="fas fa-pen-nib"></i> 6. Textanalyse
-                </button>
-                <button onclick="switchTab('reflexion')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2">
-                    <i class="fas fa-flag-checkered"></i> Abschluss
-                </button>
-            </div>
+<nav class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-gray-200 no-print">
+    <div class="container mx-auto px-4 overflow-x-auto">
+        <div class="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-2 py-3 min-w-max">
+            <button onclick="switchTab('start')" class="nav-btn active px-4 py-2 text-sm rounded-lg flex items-center gap-2"><i class="fas fa-map-signs"></i> Start</button>
+            <button onclick="switchTab('theorie')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2"><i class="fas fa-book"></i> 1. Theorie</button>
+            <button onclick="switchTab('haiti')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2"><i class="fas fa-search-location"></i> 2. Haiti</button>
+            <button onclick="switchTab('analyse')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2"><i class="fas fa-microscope"></i> 3. Analyse</button>
+            <button onclick="switchTab('vergleich')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2"><i class="fas fa-balance-scale"></i> 4. Vergleich</button>
+            <button onclick="switchTab('transfer')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2"><i class="fas fa-chess-knight"></i> 5. Transfer</button>
+            <button onclick="switchTab('quellen')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2"><i class="fas fa-pen-nib"></i> 6. Textanalyse</button>
+            <button onclick="switchTab('reflexion')" class="nav-btn px-4 py-2 text-sm rounded-lg flex items-center gap-2"><i class="fas fa-flag-checkered"></i> Abschluss</button>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <main class="container mx-auto p-4 md:p-8 max-w-6xl">
-        
-        <div class="print-header">
-            <h1>Lernportfolio: Fragile Staatlichkeit</h1>
-            <p><strong>Thema:</strong> Haiti & Somalia | <strong>Schüler:</strong> _______________________</p>
-        </div>
+<main class="container mx-auto p-4 md:p-8 max-w-6xl">
 
-        <div id="start" class="tab-content active">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                <div class="lg:col-span-2">
-                    <div class="card p-8 bg-gradient-to-br from-white to-blue-50">
-                        <h2 class="text-2xl font-bold mb-4 text-slate-800">Willkommen zum Lernmodul</h2>
-                        <p class="mb-4 text-gray-700 leading-relaxed">
-                            Dieses digitale Arbeitsblatt führt Sie systematisch durch die komplexe Thematik fragiler Staatlichkeit. 
-                            Anders als bei klassischen Aufgabenstellungen speichern Sie hier Ihre Fortschritte direkt im Browser.
-                        </p>
-                        <div class="bg-blue-100 border-l-4 border-blue-600 p-4 mb-6 rounded-r">
-                            <p class="text-sm text-blue-800">
-                                <strong>Hinweis zur Nutzung:</strong> Ihre Eingaben werden automatisch lokal gespeichert. 
-                                Nutzen Sie am Ende die PDF-Funktion, um Ihr persönliches Lernportfolio zu sichern.
-                            </p>
-                        </div>
-                        <h3 class="font-bold text-lg mb-3">Lernziele dieser Einheit:</h3>
-                        <ul class="list-none space-y-2 mb-4">
-                            <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Das Drei-Dimensionen-Modell (Schneckener) anwenden.</li>
-                            <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Ursachen und Folgen staatlicher Erosion in Haiti analysieren.</li>
-                            <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Vergleichende Analyse mit dem Fallbeispiel Somalia.</li>
-                            <li class="flex items-center gap-3"><i class="fas fa-check text-green-500"></i> Handlungsoptionen internationaler Akteure beurteilen (Urteilskompetenz).</li>
-                        </ul>
-                    </div>
+<div class="print-header">
+    <h1>Lernportfolio: Fragile Staatlichkeit</h1>
+    <p><strong>Thema:</strong> Haiti & Somalia | <strong>Schüler:</strong> _______________________</p>
+</div>
+
+<!-- ==================== TAB: START ==================== -->
+<div id="start" class="tab-content active">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div class="lg:col-span-2">
+            <div class="card p-8 bg-gradient-to-br from-white to-blue-50">
+                <h2 class="text-2xl font-bold mb-4 text-slate-800">Willkommen zum Lernmodul</h2>
+                <p class="mb-4 text-gray-700 leading-relaxed">
+                    Dieses digitale Arbeitsmodul verlangt von Ihnen, sich die zentralen Konzepte und Zusammenhänge der fragilen Staatlichkeit eigenständig zu erarbeiten. Sie finden in jedem Reiter umfangreiche wissenschaftliche Texte, Quellenanalysen und weiterführende Materialien, die Sie zunächst lesen und durchdringen müssen, bevor Sie die Aufgaben bearbeiten können. Die Texte sind in aufklappbaren Bereichen organisiert, damit Sie gezielt auf einzelne Materialien zugreifen können, ohne die Übersicht zu verlieren.
+                </p>
+                <div class="bg-blue-100 border-l-4 border-blue-600 p-4 mb-6 rounded-r">
+                    <p class="text-sm text-blue-800">
+                        <strong>Arbeitshinweis:</strong> Ihre Eingaben werden automatisch lokal gespeichert. Lesen Sie die bereitgestellten Materialien gründlich, bevor Sie die Aufgaben bearbeiten. Die Aufgaben sind so konzipiert, dass sie nur mithilfe der Materialien gelöst werden können. Nutzen Sie am Ende die PDF-Funktion, um Ihr Lernportfolio zu sichern.
+                    </p>
                 </div>
-
-                <div class="card p-6 roadmap-container">
-                    <h3 class="text-xl font-bold mb-6 text-center text-slate-700">Ihr Lernpfad</h3>
-                    <div class="pl-4">
-                        <div class="roadmap-step">
-                            <div class="roadmap-marker"></div>
-                            <h4 class="font-bold text-slate-800">1. Theorie</h4>
-                            <p class="text-xs text-gray-500">Konzepte verstehen</p>
-                        </div>
-                        <div class="roadmap-step">
-                            <div class="roadmap-marker"></div>
-                            <h4 class="font-bold text-slate-800">2. Datenerhebung</h4>
-                            <p class="text-xs text-gray-500">Fallstudie Haiti & Statistik</p>
-                        </div>
-                        <div class="roadmap-step">
-                            <div class="roadmap-marker"></div>
-                            <h4 class="font-bold text-slate-800">3. Diagnose</h4>
-                            <p class="text-xs text-gray-500">Anwendung des Modells</p>
-                        </div>
-                        <div class="roadmap-step">
-                            <div class="roadmap-marker"></div>
-                            <h4 class="font-bold text-slate-800">4. Kontextualisierung</h4>
-                            <p class="text-xs text-gray-500">Vergleich mit Somalia</p>
-                        </div>
-                        <div class="roadmap-step">
-                            <div class="roadmap-marker"></div>
-                            <h4 class="font-bold text-slate-800">5. Lösungssuche</h4>
-                            <p class="text-xs text-gray-500">Interventionsszenarien</p>
-                        </div>
-                        <div class="roadmap-step">
-                            <div class="roadmap-marker" style="border-color: #10b981;"></div>
-                            <h4 class="font-bold text-green-700">ZIEL: Urteil</h4>
-                            <p class="text-xs text-gray-500">Reflexion & Fazit</p>
-                        </div>
-                    </div>
-                    <button onclick="switchTab('theorie')" class="w-full mt-4 bg-primary text-white bg-blue-700 hover:bg-blue-800 font-bold py-2 px-4 rounded transition text-sm">
-                        Starten <i class="fas fa-arrow-right ml-2"></i>
-                    </button>
-                </div>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    In diesem Modul werden Sie das Drei-Dimensionen-Modell nach Ulrich Schneckener auf die Fallbeispiele Haiti und Somalia anwenden. Dabei erarbeiten Sie sich zunächst die theoretischen Grundlagen anhand von Originaltexten, analysieren dann empirische Daten und Fallstudien, um schließlich zu einem eigenständigen, begründeten Urteil über internationale Handlungsoptionen zu gelangen. Jeder Abschnitt enthält weiterführende Links zu wissenschaftlichen Institutionen, deren Datenbanken und Publikationen Sie für Ihre Analyse heranziehen sollen.
+                </p>
             </div>
         </div>
 
-        <div id="theorie" class="tab-content">
-            <div class="card p-8">
-                <h2 class="text-3xl mb-6 border-b pb-2 text-slate-800">1. Theoretischer Rahmen: Staatlichkeit</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                    <div class="text-gray-700 leading-relaxed text-justify">
-                        <p class="mb-4">
-                            Um das Phänomen fragiler Staatlichkeit politikwissenschaftlich zu erfassen, dient das <strong>Drei-Säulen-Modell</strong> nach Ulrich Schneckener als analytische Matrix. Es operationalisiert Staatlichkeit in drei funktionalen Dimensionen:
-                        </p>
-                        
-                        <div class="mb-6">
-                            <h4 class="font-bold text-blue-900 flex items-center gap-2"><i class="fas fa-shield-alt"></i> 1. Sicherheitsfunktion (Gewaltmonopol)</h4>
-                            <p class="text-sm mt-1">
-                                Der Staat besitzt das <span class="glossary-term">Monopol physischer Gewaltsamkeit<span class="glossary-popup">Definition nach Max Weber: Nur der Staat darf legitim Zwang ausüben.</span></span>. Er garantiert die physische Unversehrtheit der Bürger nach innen (Rechtsdurchsetzung) und außen (Verteidigung). <br><em>Erosion führt zu: Warlordism, Milizenherrschaft, Bürgerkrieg.</em>
-                            </p>
-                        </div>
-
-                        <div class="mb-6">
-                            <h4 class="font-bold text-green-800 flex items-center gap-2"><i class="fas fa-hands-holding-circle"></i> 2. Wohlfahrtsfunktion (Daseinsvorsorge)</h4>
-                            <p class="text-sm mt-1">
-                                Bereitstellung öffentlicher Güter (Infrastruktur, Bildung, Gesundheit) und Mechanismen zur sozioökonomischen Umverteilung. Dies bildet die materielle Basis des Gesellschaftsvertrags.<br><em>Erosion führt zu: Humanitären Krisen, absoluter Armut, Schattenwirtschaft.</em>
-                            </p>
-                        </div>
-
-                        <div class="mb-6">
-                            <h4 class="font-bold text-purple-800 flex items-center gap-2"><i class="fas fa-gavel"></i> 3. Legitimitätsfunktion (Rechtsstaat)</h4>
-                            <p class="text-sm mt-1">
-                                Partizipation, Rechtsstaatlichkeit und die Akzeptanz der Herrschaftsform durch die Bevölkerung. Legitimität erzeugt Loyalität.<br><em>Erosion führt zu: Korruption, Wahlmanipulation, politischer Apathie oder Aufstand.</em>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="student-work bg-gray-50 p-6 rounded-xl border border-gray-200">
-                        <h3 class="font-bold mb-4 text-slate-700"><i class="fas fa-pen text-blue-500 mr-2"></i>Ihre Definitionen</h3>
-                        <p class="text-xs text-gray-500 mb-4">Formulieren Sie in eigenen Worten, woran man das Scheitern der jeweiligen Dimension erkennt.</p>
-                        
-                        <label class="block text-sm font-semibold mb-1 text-blue-900">Indikatoren für Sicherheitsverlust:</label>
-                        <textarea id="def-security" class="w-full h-20 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition mb-4 resize-none" placeholder="z.B. Auftreten privater Milizen..."></textarea>
-                        
-                        <label class="block text-sm font-semibold mb-1 text-green-900">Indikatoren für Wohlfahrtsverlust:</label>
-                        <textarea id="def-welfare" class="w-full h-20 p-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none transition mb-4 resize-none" placeholder="z.B. Zusammenbruch der Versorgung..."></textarea>
-                        
-                        <label class="block text-sm font-semibold mb-1 text-purple-900">Indikatoren für Legitimitätsverlust:</label>
-                        <textarea id="def-legitimacy" class="w-full h-20 p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none transition resize-none" placeholder="z.B. Boykott von Wahlen..."></textarea>
-                    </div>
-                </div>
+        <div class="card p-6 roadmap-container">
+            <h3 class="text-xl font-bold mb-6 text-center text-slate-700">Ihr Lernpfad</h3>
+            <div class="pl-4">
+                <div class="roadmap-step"><div class="roadmap-marker"></div><h4 class="font-bold text-slate-800">1. Theorie</h4><p class="text-xs text-gray-500">Konzepte erarbeiten</p></div>
+                <div class="roadmap-step"><div class="roadmap-marker"></div><h4 class="font-bold text-slate-800">2. Datenerhebung</h4><p class="text-xs text-gray-500">Fallstudie Haiti & Statistik</p></div>
+                <div class="roadmap-step"><div class="roadmap-marker"></div><h4 class="font-bold text-slate-800">3. Diagnose</h4><p class="text-xs text-gray-500">Anwendung des Modells</p></div>
+                <div class="roadmap-step"><div class="roadmap-marker"></div><h4 class="font-bold text-slate-800">4. Kontextualisierung</h4><p class="text-xs text-gray-500">Vergleich mit Somalia</p></div>
+                <div class="roadmap-step"><div class="roadmap-marker"></div><h4 class="font-bold text-slate-800">5. Lösungssuche</h4><p class="text-xs text-gray-500">Interventionsszenarien</p></div>
+                <div class="roadmap-step"><div class="roadmap-marker" style="border-color: #10b981;"></div><h4 class="font-bold text-green-700">ZIEL: Urteil</h4><p class="text-xs text-gray-500">Reflexion & Fazit</p></div>
             </div>
+            <button onclick="switchTab('theorie')" class="w-full mt-4 bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded transition text-sm">
+                Starten <i class="fas fa-arrow-right ml-2"></i>
+            </button>
         </div>
+    </div>
+</div>
 
-        <div id="haiti" class="tab-content">
-            <div class="card p-8">
-                <h2 class="text-3xl mb-6 border-b pb-2 text-red-700">2. Fallstudie: Die Situation in Haiti</h2>
-                
-                <div class="bg-slate-100 rounded-xl p-6 mb-8 chart-visuals">
-                    <h3 class="text-lg font-bold mb-4 text-slate-700"><i class="fas fa-chart-bar mr-2"></i>Statistisches Dossier (Vergleichswerte)</h3>
-                    
+<!-- ==================== TAB: THEORIE ==================== -->
+<div id="theorie" class="tab-content">
+    <div class="card p-8">
+        <h2 class="text-3xl mb-6 border-b pb-2 text-slate-800">1. Theoretischer Rahmen: Staatlichkeit</h2>
+
+        <p class="mb-6 text-gray-700 leading-relaxed">
+            Die folgenden Materialien enthalten wissenschaftliche Texte, die Sie zunächst eigenständig erarbeiten müssen. Lesen Sie die Quellen aufmerksam und beantworten Sie anschließend die Aufgaben. Achten Sie darauf, dass Sie Fachbegriffe korrekt verwenden und Ihre Aussagen stets am Textmaterial belegen.
+        </p>
+
+        <!-- MATERIAL A: Weber -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material A</span> Max Weber: Das Gewaltmonopol des Staates (Grundlagentext)</summary>
+            <div class="dropdown-content">
+                <div class="academic-text">
+                    <p>Der moderne Staat lässt sich nach Max Weber soziologisch letztlich nur definieren durch ein spezifisches Mittel, das ihm eigentümlich ist: die physische Gewaltsamkeit. „Jeder Staat wird auf Gewalt gegründet", sagte seinerzeit Trotzki in Brest-Litowsk. Das ist in der Tat richtig. Wenn nur soziale Gebilde beständen, denen die Gewaltsamkeit als Mittel unbekannt wäre, dann würde der Begriff „Staat" fortgefallen sein; dann wäre eingetreten, was man in diesem besonderen Sinne des Wortes als „Anarchie" bezeichnen würde. Gewaltsamkeit ist natürlich nicht etwa das normale oder einzige Mittel des Staates, doch sie ist das ihm spezifische Mittel. Gerade in der Gegenwart ist die Beziehung des Staates zur Gewaltsamkeit besonders intim. In der Vergangenheit haben die verschiedensten Verbände, von der Sippe angefangen, physische Gewaltsamkeit als ganz normales Mittel gekannt. Heute dagegen werden wir sagen müssen, dass der Staat diejenige menschliche Gemeinschaft ist, welche innerhalb eines bestimmten Gebietes das Monopol legitimer physischer Gewaltsamkeit für sich beansprucht.</p>
+                    <p>Der Staat ist, ebenso wie die ihm geschichtlich vorausgehenden politischen Verbände, ein auf das Mittel der legitimen Gewaltsamkeit gestütztes Herrschaftsverhältnis von Menschen über Menschen. Damit er bestehe, müssen sich also die beherrschten Menschen der beanspruchten Autorität der jeweils herrschenden fügen. Wann und warum sie das tun, lässt sich nur verstehen, wenn man die inneren Rechtfertigungsgründe und die äußeren Mittel kennt, auf welche sich eine Herrschaft stützt. Es gibt der inneren Rechtfertigungen, also der Legitimitätsgründe einer Herrschaft, drei: die Autorität des „ewig Gestrigen", die Autorität der außeralltäglichen persönlichen Gnadengabe (Charisma), und die Herrschaft kraft „Legalität", kraft des Glaubens an die Geltung legaler Satzung und der durch rational geschaffene Regeln begründeten sachlichen Kompetenz.</p>
+                    <p>In der Realität sind freilich die Gehorsamsgründe stark durch Angst und Hoffnung bedingt – Angst vor der Rache magischer Gewalten oder des Machthabers, Hoffnung auf jenseitigen oder diesseitigen Lohn – und daneben durch die allerverschiedensten Interessen. Für den Bestand einer Herrschaft ist jedoch die Anerkennung der Legitimität durch die Beherrschten von grundlegender Bedeutung. Wo diese Legitimität erodiert, wo also die Beherrschten den Machtanspruch der Herrschenden nicht mehr als gerechtfertigt anerkennen, dort beginnt der Prozess des staatlichen Zerfalls.</p>
+                </div>
+                <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quelle: Weber, Max (1919): Politik als Beruf. Vortrag, gehalten auf Einladung des Freistudentischen Bundes München. Adaptiert und gekürzt für den Unterrichtsgebrauch.</p>
+                <a href="https://www.projekt-gutenberg.org/weber/politik/politik.html" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> Volltext „Politik als Beruf" bei Projekt Gutenberg</a>
+            </div>
+        </details>
+
+        <!-- MATERIAL B: Schneckener -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material B</span> Ulrich Schneckener: Das Drei-Dimensionen-Modell fragiler Staatlichkeit</summary>
+            <div class="dropdown-content">
+                <div class="academic-text">
+                    <p>Fragile Staatlichkeit ist kein binärer Zustand, sondern ein graduelles Phänomen, das sich entlang verschiedener Dimensionen differenzieren lässt. In der politikwissenschaftlichen Forschung hat sich das Drei-Dimensionen-Modell von Ulrich Schneckener als analytisches Instrument durchgesetzt, weil es Staatlichkeit nicht als monolithischen Block begreift, sondern als Zusammenspiel dreier funktionaler Kernbereiche, die jeweils unterschiedlich stark erodieren können.</p>
+                    <p>Die erste Dimension betrifft die Sicherheitsfunktion, die im Wesentlichen auf dem Weberschen Gewaltmonopol aufbaut. Ein funktionierender Staat kontrolliert sein gesamtes Territorium, entwaffnet nicht-staatliche Gewaltakteure und garantiert seinen Bürgern physische Unversehrtheit durch eine regelgebundene, rechtsstaatlich kontrollierte Polizei und Armee. In fragilen Kontexten zeigt sich die Erosion dieser Funktion durch das Auftreten privater Sicherheitsdienstleister, durch Milizen und Warlords, die ganze Regionen kontrollieren, oder durch das vollständige Verschwinden staatlicher Sicherheitsorgane aus peripheren Gebieten. Die Folgen reichen von lokaler Unsicherheit über systematische Gewalt gegen die Zivilbevölkerung bis hin zu vollständigem Bürgerkrieg.</p>
+                    <p>Die zweite Dimension umfasst die Wohlfahrtsfunktion, also die Fähigkeit des Staates zur Daseinsvorsorge und zur Bereitstellung öffentlicher Güter. Hierunter fallen der Zugang zu Bildungseinrichtungen, Gesundheitsversorgung, funktionierender Infrastruktur (Straßen, Wasser, Elektrizität), aber auch die Fähigkeit zur Steuererhebung und Umverteilung als Grundlage des Gesellschaftsvertrags zwischen Staat und Bürgern. Wenn der Staat diese Leistungen nicht mehr erbringt, treten typischerweise nicht-staatliche Akteure an seine Stelle: religiöse Organisationen betreiben Schulen und Krankenhäuser, kriminelle Netzwerke bieten Schutz gegen Bezahlung, internationale Hilfsorganisationen übernehmen staatliche Kernaufgaben. Diese Substitution stabilisiert kurzfristig, untergräbt aber langfristig die Notwendigkeit und damit die Legitimität des Staates selbst.</p>
+                    <p>Die dritte Dimension schließlich betrifft die Legitimitätsfunktion, die sowohl die Input-Legitimität (demokratische Partizipation, Wahlen, politische Teilhabe) als auch die Output-Legitimität (Leistungsfähigkeit, Problemlösung, Rechtsstaatlichkeit) umfasst. Ein Staat, der zwar formal demokratisch verfasst ist, dessen Wahlen aber manipuliert werden, dessen Justiz korrupt ist und dessen politische Elite sich systematisch bereichert, verliert in den Augen seiner Bürger die Berechtigung zu herrschen. Schneckener betont, dass die drei Dimensionen in einem hierarchischen Verhältnis zueinander stehen: Ohne ein Mindestmaß an Sicherheit kann keine Wohlfahrt bereitgestellt werden, und ohne Wohlfahrt und Sicherheit erodiert die Legitimität. Gleichzeitig können sich die Dimensionen jedoch auch wechselseitig stabilisieren oder destabilisieren, sodass eine einfache kausale Kette nicht immer gegeben ist.</p>
+                    <p>Basierend auf diesem Modell unterscheidet Schneckener vier idealtypische Kategorien: Der „konsolidierte Staat", in dem alle drei Funktionen erfüllt werden; der „schwache Staat" (Weak State), in dem eine oder zwei Funktionen defizitär sind; der „versagende Staat" (Failing State), in dem alle drei Funktionen erheblich eingeschränkt sind, wobei der Staat noch existiert; sowie der „gescheiterte Staat" (Failed/Collapsed State), in dem staatliche Strukturen vollständig zusammengebrochen sind und kein zentraler Akteur mehr die drei Kernfunktionen wahrnimmt. Diese Typologie ist nicht als statische Zuordnung zu verstehen, sondern als dynamisches Spektrum, auf dem sich Staaten in unterschiedliche Richtungen bewegen können.</p>
+                </div>
+                <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quelle: Zusammenfassende Darstellung nach Schneckener, Ulrich (2006): Fragile Staatlichkeit. „States at Risk" zwischen Stabilität und Scheitern. Baden-Baden: Nomos. Sowie: Schneckener, Ulrich (2004): States at Risk. Fragile Staaten als Sicherheits- und Entwicklungsproblem. SWP-Studie.</p>
+                <a href="https://www.swp-berlin.org/publikation/states-at-risk" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> SWP-Studie „States at Risk" (Original-Publikation)</a>
+                <a href="https://www.bpb.de/themen/kriege-konflikte/dossier-kriege-konflikte/54541/fragile-staatlichkeit-als-sicherheits-und-entwicklungsproblem/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> Bundeszentrale für politische Bildung: Fragile Staatlichkeit</a>
+            </div>
+        </details>
+
+        <!-- MATERIAL C: Fragile States Index -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material C</span> Der Fragile States Index: Methodik und Kritik</summary>
+            <div class="dropdown-content">
+                <div class="academic-text">
+                    <p>Der Fragile States Index (FSI), der jährlich vom Fund for Peace veröffentlicht wird, zählt zu den bekanntesten quantitativen Instrumenten zur Messung staatlicher Fragilität. Er bewertet 179 Staaten anhand von zwölf Indikatoren, die in drei Gruppen aufgeteilt sind: soziale Indikatoren (demographischer Druck, Fluchtbewegungen, Gruppenparanoia, Brain Drain), wirtschaftliche Indikatoren (ungleiche ökonomische Entwicklung, wirtschaftlicher Niedergang) und politisch-militärische Indikatoren (Delegitimierung des Staates, Verfall öffentlicher Dienstleistungen, Menschenrechtsverletzungen, Verselbständigung des Sicherheitsapparates, Fragmentierung der Eliten, externe Intervention). Jeder Indikator wird auf einer Skala von 0 bis 10 bewertet, woraus sich ein Gesamtwert von maximal 120 Punkten ergibt, wobei höhere Werte größere Fragilität anzeigen.</p>
+                    <p>Die Methodik des FSI kombiniert qualitative und quantitative Ansätze. Einerseits werden große Mengen öffentlich zugänglicher Daten und Medienberichte durch computergestützte Textanalyseverfahren (Content Analysis) ausgewertet, andererseits fließen Expertenbewertungen in die Indexbildung ein. Dieses Vorgehen erlaubt eine jährliche Aktualisierung und die vergleichende Einordnung von Staaten auf einer Rangskala. Im Jahr 2023 etwa rangierte Somalia mit einem Wert von 111,9 auf Platz zwei des Index (nach Jemen), während Haiti mit einem Wert von 102,9 unter den zwanzig fragilsten Staaten weltweit lag. Zum Vergleich: Norwegen erreichte lediglich 14,5 Punkte und wurde damit als einer der stabilsten Staaten klassifiziert, Deutschland lag bei 28,4 Punkten.</p>
+                    <p>Die Kritik am FSI ist vielfältig und berührt grundsätzliche methodologische Fragen. Zunächst wird bemängelt, dass der Index verschiedenartige Phänomene in einem einzigen numerischen Wert verdichtet, was die tatsächliche Komplexität staatlicher Fragilität verdeckt. Ein Staat kann beispielsweise in der Sicherheitsdimension funktionieren, aber in der Wohlfahrtsdimension völlig versagen, ohne dass dies im Gesamtindex sichtbar wird. Ferner wird die Auswahl und Gewichtung der Indikatoren als normativ problematisch betrachtet, da sie implizit ein westlich-liberales Staatsverständnis als Maßstab setzt und alternative Ordnungsformen (etwa traditionelle Clan-Strukturen oder religiöse Governance-Modelle) von vornherein als defizitär markiert. Schließlich wird die Bezeichnung „Fragile State" selbst kritisiert, weil sie Staaten auf ihre Defizite reduziere und das Risiko einer Self-Fulfilling Prophecy berge, bei der internationale Akteure aufgrund des Labels ihre Unterstützung konditionieren oder zurückziehen.</p>
+                </div>
+                <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quelle: Eigene Zusammenfassung basierend auf Fund for Peace: Fragile States Index Methodology (2023) sowie Call, Charles T. (2011): Beyond the 'Failed State': Toward Conceptual Alternatives. European Journal of International Relations.</p>
+                <a href="https://fragilestatesindex.org/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> Fragile States Index – Interaktive Karte und Daten (Fund for Peace)</a>
+                <a href="https://fragilestatesindex.org/methodology/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> FSI Methodology – Detaillierte Erläuterung der Indikatoren</a>
+            </div>
+        </details>
+
+        <!-- AUFGABEN -->
+        <div class="task-block">
+            <div class="task-label"><i class="fas fa-pen mr-2"></i>Aufgabenblock 1: Theoretische Grundlagen</div>
+            
+            <div class="task-instruction">
+                <strong>Aufgabe 1a:</strong> Lesen Sie Material A und B. Arbeiten Sie heraus, wie Schneckeners Sicherheitsfunktion auf Webers Konzept des Gewaltmonopols aufbaut. Erläutern Sie in eigenen Worten, warum Weber die physische Gewaltsamkeit als das dem Staat „spezifische Mittel" bezeichnet und welche Konsequenzen sich daraus für die Analyse fragiler Staaten ergeben.
+            </div>
+            <textarea id="def-security" class="w-full h-28 p-3 mb-4 resize-none" placeholder="Ihr Text..."></textarea>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 1b:</strong> Erklären Sie auf Grundlage von Material B den Zusammenhang zwischen Wohlfahrtsfunktion und Legitimität. Schneckener argumentiert, dass die Substitution staatlicher Leistungen durch nicht-staatliche Akteure „langfristig die Legitimität des Staates selbst" untergräbt. Setzen Sie diese These in Beziehung zu Webers Legitimitätsgründen aus Material A.
+            </div>
+            <textarea id="def-welfare" class="w-full h-28 p-3 mb-4 resize-none" placeholder="Ihr Text..."></textarea>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 1c:</strong> Studieren Sie Material C. Der Fragile States Index wird von manchen Forschern als normativ problematisch betrachtet. Arbeiten Sie die im Text genannten Kritikpunkte heraus und nehmen Sie begründet Stellung dazu, ob ein solcher Index für die politikwissenschaftliche Analyse von Nutzen ist oder ob er mehr schadet als nützt.
+            </div>
+            <textarea id="def-legitimacy" class="w-full h-28 p-3 resize-none" placeholder="Ihr Text..."></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== TAB: HAITI ==================== -->
+<div id="haiti" class="tab-content">
+    <div class="card p-8">
+        <h2 class="text-3xl mb-6 border-b pb-2 text-red-700">2. Fallstudie: Die Situation in Haiti</h2>
+
+        <p class="mb-6 text-gray-700 leading-relaxed">
+            Im Folgenden finden Sie umfangreiches Material zur Lage in Haiti. Arbeiten Sie die Materialien systematisch durch und nutzen Sie die weiterführenden Links, um Ihre Analyse zu vertiefen. Die Aufgaben am Ende des Reiters erfordern, dass Sie Informationen aus mehreren Materialien zusammenführen.
+        </p>
+
+        <!-- Statistisches Dossier -->
+        <details class="material-dropdown" open>
+            <summary><span class="source-tag">Daten</span> Statistisches Dossier: Haiti im internationalen Vergleich</summary>
+            <div class="dropdown-content">
+                <div class="bg-slate-100 rounded-xl p-6 chart-visuals">
+                    <h4 class="text-lg font-bold mb-4 text-slate-700"><i class="fas fa-chart-bar mr-2"></i>Vergleichsdaten</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span><strong>HDI (Human Development Index)</strong></span>
-                                <span class="text-gray-500">Max: 1.0</span>
-                            </div>
+                            <div class="flex justify-between text-sm mb-1"><span><strong>HDI (Human Development Index)</strong></span><span class="text-gray-500">Max: 1.0</span></div>
                             <div class="space-y-3">
-                                <div>
-                                    <div class="flex justify-between text-xs mb-1"><span>Deutschland</span><span>0.94</span></div>
-                                    <div class="bar-container"><div class="bar-fill bg-blue-500" style="width: 94%">DE</div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-xs mb-1"><span>Dominikanische Rep. (Nachbar)</span><span>0.76</span></div>
-                                    <div class="bar-container"><div class="bar-fill bg-green-500" style="width: 76%">DOM</div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-xs mb-1"><span>Haiti</span><span>0.53</span></div>
-                                    <div class="bar-container"><div class="bar-fill bg-red-600" style="width: 53%">HAI</div></div>
-                                </div>
+                                <div><div class="flex justify-between text-xs mb-1"><span>Deutschland</span><span>0.94</span></div><div class="bar-container"><div class="bar-fill bg-blue-500" style="width: 94%">DE</div></div></div>
+                                <div><div class="flex justify-between text-xs mb-1"><span>Dominikanische Rep. (Nachbar)</span><span>0.76</span></div><div class="bar-container"><div class="bar-fill bg-green-500" style="width: 76%">DOM</div></div></div>
+                                <div><div class="flex justify-between text-xs mb-1"><span>Haiti</span><span>0.53</span></div><div class="bar-container"><div class="bar-fill bg-red-600" style="width: 53%">HAI</div></div></div>
                             </div>
                         </div>
-
                         <div>
-                            <div class="flex justify-between text-sm mb-1">
-                                <span><strong>Fragile States Index (2023)</strong></span>
-                                <span class="text-gray-500">Max Instabilität: 120</span>
-                            </div>
-                             <div class="space-y-3">
-                                <div>
-                                    <div class="flex justify-between text-xs mb-1"><span>Somalia</span><span>111.9 (Sehr kritisch)</span></div>
-                                    <div class="bar-container"><div class="bar-fill bg-purple-800" style="width: 93%">SOM</div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-xs mb-1"><span>Haiti</span><span>102.9 (Kritisch)</span></div>
-                                    <div class="bar-container"><div class="bar-fill bg-red-600" style="width: 85%">HAI</div></div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-xs mb-1"><span>Norwegen</span><span>14.5 (Stabil)</span></div>
-                                    <div class="bar-container"><div class="bar-fill bg-blue-400" style="width: 12%">NOR</div></div>
-                                </div>
+                            <div class="flex justify-between text-sm mb-1"><span><strong>Fragile States Index (2023)</strong></span><span class="text-gray-500">Max Instabilität: 120</span></div>
+                            <div class="space-y-3">
+                                <div><div class="flex justify-between text-xs mb-1"><span>Somalia</span><span>111.9 (Sehr kritisch)</span></div><div class="bar-container"><div class="bar-fill bg-purple-800" style="width: 93%">SOM</div></div></div>
+                                <div><div class="flex justify-between text-xs mb-1"><span>Haiti</span><span>102.9 (Kritisch)</span></div><div class="bar-container"><div class="bar-fill bg-red-600" style="width: 85%">HAI</div></div></div>
+                                <div><div class="flex justify-between text-xs mb-1"><span>Norwegen</span><span>14.5 (Stabil)</span></div><div class="bar-container"><div class="bar-fill bg-blue-400" style="width: 12%">NOR</div></div></div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
-                    <div class="bg-black rounded-xl overflow-hidden shadow-lg h-64 no-print">
-                        <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/EIjU8GLWVN0" title="Haiti Crisis" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-lg mb-2">Aktuelle Lage (2024/25)</h3>
-                        <p class="text-sm leading-relaxed mb-4">
-                            Seit der Ermordung von Präsident Moïse hat sich in Haiti ein Machtvakuum gebildet. Kriminelle Allianzen wie die "G9 an fanmi e alye" unter Führung von Jimmy "Barbecue" Chérizier kontrollieren wesentliche Teile der Hauptstadt Port-au-Prince.
-                        </p>
-                        <ul class="text-sm space-y-2">
-                            <li class="flex items-start"><i class="fas fa-exclamation-circle text-red-500 mt-1 mr-2"></i> <strong>Sicherheit:</strong> 80% der Hauptstadt unter Gang-Kontrolle.</li>
-                            <li class="flex items-start"><i class="fas fa-exclamation-circle text-red-500 mt-1 mr-2"></i> <strong>Versorgung:</strong> Häfen blockiert, Treibstoffmangel, Cholera-Ausbruch.</li>
-                            <li class="flex items-start"><i class="fas fa-exclamation-circle text-red-500 mt-1 mr-2"></i> <strong>Politik:</strong> Übergangsrat installiert, keine gewählte Regierung im Amt.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="student-work">
-                    <label class="block text-sm font-bold mb-2 text-slate-700">Explorative Notizen:</label>
-                    <p class="text-xs text-gray-500 mb-2">Notieren Sie zentrale Akteure und deren Interessen, die im Video oder Text genannt werden.</p>
-                    <textarea id="haiti-notes" class="w-full h-32 p-4 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition" placeholder="Akteure: G9, Polizei, Regierung, Zivilgesellschaft..."></textarea>
-                </div>
+                <a href="https://hdr.undp.org/data-center/country-insights#/ranks" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> UNDP Human Development Reports – Länderdaten vergleichen</a>
+                <a href="https://fragilestatesindex.org/country-data/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> Fragile States Index – Country Dashboard Haiti</a>
             </div>
-        </div>
+        </details>
 
-        <div id="analyse" class="tab-content">
-            <div class="card p-8">
-                <h2 class="text-3xl mb-6 border-b pb-2 text-blue-800">3. Systematische Diagnose</h2>
-                
-                <p class="mb-6 text-gray-600">
-                    Wenden Sie nun das Schneckener-Modell auf die gesammelten Informationen an. Bewerten Sie den Grad der Funktionalität.
-                </p>
-
-                <div class="student-work space-y-6">
-                    <div class="border-l-4 border-blue-600 pl-4 bg-blue-50 p-4 rounded-r-lg">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-blue-900">Sicherheitsfunktion</h3>
-                            <select id="rating-security" class="border p-1 rounded text-sm bg-white">
-                                <option value="-">Bewertung wählen...</option>
-                                <option value="intakt">Intakt</option>
-                                <option value="defizitär">Defizitär</option>
-                                <option value="kollabiert">Kollabiert</option>
-                            </select>
-                        </div>
-                        <textarea id="ana-security" class="w-full h-24 p-2 border rounded bg-white" placeholder="Belege: Wer hat das Gewaltmonopol? Gibt es Zonen begrenzter Staatlichkeit?"></textarea>
-                    </div>
-
-                    <div class="border-l-4 border-green-600 pl-4 bg-green-50 p-4 rounded-r-lg">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-green-900">Wohlfahrtsfunktion</h3>
-                            <select id="rating-welfare" class="border p-1 rounded text-sm bg-white">
-                                <option value="-">Bewertung wählen...</option>
-                                <option value="intakt">Intakt</option>
-                                <option value="defizitär">Defizitär</option>
-                                <option value="kollabiert">Kollabiert</option>
-                            </select>
-                        </div>
-                        <textarea id="ana-welfare" class="w-full h-24 p-2 border rounded bg-white" placeholder="Belege: Zugang zu Wasser, Bildung, Gesundheit? Steuererhebung?"></textarea>
-                    </div>
-
-                    <div class="border-l-4 border-purple-600 pl-4 bg-purple-50 p-4 rounded-r-lg">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="font-bold text-purple-900">Legitimitätsfunktion</h3>
-                            <select id="rating-legitimacy" class="border p-1 rounded text-sm bg-white">
-                                <option value="-">Bewertung wählen...</option>
-                                <option value="intakt">Intakt</option>
-                                <option value="defizitär">Defizitär</option>
-                                <option value="kollabiert">Kollabiert</option>
-                            </select>
-                        </div>
-                        <textarea id="ana-legitimacy" class="w-full h-24 p-2 border rounded bg-white" placeholder="Belege: Wahlen? Verfassungsmäßigkeit? Vertrauen der Bevölkerung?"></textarea>
-                    </div>
-
-                    <div class="mt-8">
-                        <h3 class="font-bold mb-2">Synthese: Klassifikation</h3>
-                        <p class="text-sm text-gray-500 mb-2">Ist Haiti ein <em>Weak State</em>, <em>Failing State</em> oder <em>Collapsed State</em>? Begründen Sie unter Verwendung der Fachbegriffe.</p>
-                        <textarea id="ana-synthesis" class="w-full h-32 p-4 border-2 rounded-lg bg-gray-50 font-medium" placeholder="Haiti ist als ... zu klassifizieren, da..."></textarea>
-                    </div>
+        <!-- Video-Material -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Video</span> Dokumentation: Die aktuelle Krise in Haiti</summary>
+            <div class="dropdown-content">
+                <div class="bg-black rounded-xl overflow-hidden shadow-lg h-64 no-print mb-4">
+                    <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/EIjU8GLWVN0" title="Haiti Crisis" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
+                <p class="text-sm text-gray-600 mb-2" style="font-family: 'Source Sans 3', sans-serif;">Sehen Sie sich das Video an und notieren Sie sich beim Schauen zentrale Akteure, deren Interessen und die im Video beschriebenen Ursachen der aktuellen Krise. Achten Sie besonders auf die Rolle nicht-staatlicher Gewaltakteure und auf die Beschreibung der humanitären Lage.</p>
             </div>
-        </div>
+        </details>
 
-        <div id="vergleich" class="tab-content">
-            <div class="card p-8">
-                <h2 class="text-3xl mb-6 border-b pb-2 text-indigo-700">4. Komparative Analyse: Somalia</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div class="bg-indigo-50 p-4 rounded-lg">
-                        <h4 class="font-bold text-indigo-900 mb-2">Haiti</h4>
-                        <ul class="text-sm list-disc pl-4 space-y-1">
-                            <li>Historisch: Erste schwarze Republik (1804).</li>
-                            <li>Ursachen: Naturkatastrophen, ausländische Interventionen, Korruption.</li>
-                            <li>Struktur: Zentralstaatlich organisiert (aber ineffektiv).</li>
-                        </ul>
-                    </div>
-                    <div class="bg-purple-50 p-4 rounded-lg">
-                        <h4 class="font-bold text-purple-900 mb-2">Somalia</h4>
-                        <ul class="text-sm list-disc pl-4 space-y-1">
-                            <li>Historisch: Staatszerfall seit 1991.</li>
-                            <li>Struktur: Clan-System dominierend, Al-Shabaab Terrorismus.</li>
-                            <li>Besonderheit: Somaliland (funktionaler De-facto-Staat im Norden).</li>
-                        </ul>
-                    </div>
+        <!-- Material D: Historischer Hintergrund -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material D</span> Historischer Abriss: Von der Sklavenrevolution zum gescheiterten Staat</summary>
+            <div class="dropdown-content">
+                <div class="academic-text">
+                    <p>Die Geschichte Haitis ist untrennbar mit der Erfahrung von Kolonialismus, Sklaverei und externer Einflussnahme verwoben. Als die französische Kolonie Saint-Domingue im Jahr 1804 nach einer zwölfjährigen Sklavenrevolution die Unabhängigkeit erklärte, war Haiti die erste schwarze Republik der Weltgeschichte und der zweite unabhängige Staat der westlichen Hemisphäre nach den Vereinigten Staaten. Doch die Rahmenbedingungen der Staatsgründung waren von Beginn an durch strukturelle Gewalt geprägt, die bis in die Gegenwart nachwirkt.</p>
+                    <p>Frankreich erkannte die Unabhängigkeit seiner ehemaligen Kolonie erst 1825 an, und dies nur gegen eine erdrückende Entschädigungszahlung von 150 Millionen Francs, die Haiti für den „Verlust" der Plantagenbesitzer an die ehemalige Kolonialmacht entrichten musste. Diese Schuld, die später auf 90 Millionen reduziert wurde, band das junge Land für mehr als ein Jahrhundert in einen Kreislauf aus Verschuldung und wirtschaftlicher Abhängigkeit. Historiker wie Franck Séguy argumentieren, dass diese „Unabhängigkeitsschuld" die Grundlage für Haitis chronische Unterentwicklung legte, da alle verfügbaren Staatseinnahmen in den Schuldendienst flossen statt in den Aufbau von Infrastruktur und Institutionen.</p>
+                    <p>Das 20. Jahrhundert brachte weitere schwere Belastungen für die staatliche Entwicklung. Die Besetzung durch die Vereinigten Staaten von 1915 bis 1934 wurde offiziell mit der Stabilisierung des Landes begründet, diente aber primär der Sicherung amerikanischer Wirtschaftsinteressen und führte zur gewaltsamen Auflösung des haitianischen Parlaments sowie zur Einführung einer neuen Verfassung, die ausländischen Grundbesitz ermöglichte. Die anschließende Diktatur der Familie Duvalier von 1957 bis 1986, zunächst unter François „Papa Doc" Duvalier und dann unter seinem Sohn Jean-Claude „Baby Doc" Duvalier, etablierte ein System des Staatsterrors durch die berüchtigten Tontons Macoutes, eine paramilitärische Schlägertruppe, die jede Opposition systematisch eliminierte und die staatlichen Ressourcen zugunsten der herrschenden Elite abschöpfte.</p>
+                    <p>Nach dem Sturz der Duvalier-Dynastie 1986 folgte eine Phase der politischen Instabilität, die durch wiederkehrende Militärputsche, externe Interventionen und gescheiterte Demokratisierungsversuche gekennzeichnet war. Die Wahl von Jean-Bertrand Aristide 1990, dem ersten demokratisch gewählten Präsidenten, weckte kurzzeitig Hoffnungen, doch er wurde bereits 1991 durch einen Militärputsch gestürzt und erst durch eine US-geführte Intervention 1994 wieder eingesetzt. Sein zweites Mandat endete 2004 erneut im Chaos, als bewaffnete Rebellen die Kontrolle über weite Teile des Landes übernahmen und Aristide unter ungeklärten Umständen das Land verließ.</p>
+                    <p>Die UN-Stabilisierungsmission MINUSTAH, die von 2004 bis 2017 in Haiti operierte und zeitweise über 12.000 Soldaten und Polizisten umfasste, konnte zwar die ärgsten Gewaltexzesse eindämmen, wurde jedoch selbst zum Quell schwerer Legitimationskrisen. Der MINUSTAH-Cholera-Skandal, bei dem nepalesische Blauhelmsoldaten 2010 den Erreger in den Artibonite-Fluss einschleppten und damit eine Epidemie auslösten, die über 10.000 Menschen tötete, zerstörte das Vertrauen der haitianischen Bevölkerung in die internationale Gemeinschaft nachhaltig. Hinzu kamen zahlreiche dokumentierte Fälle sexueller Gewalt durch UN-Soldaten gegen die lokale Bevölkerung.</p>
                 </div>
-
-                <div class="student-work">
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse border border-gray-300 mb-6 text-sm">
-                            <thead>
-                                <tr class="bg-gray-100">
-                                    <th class="border p-2 text-left">Vergleichskriterium</th>
-                                    <th class="border p-2 text-left w-1/3">Gemeinsamkeiten</th>
-                                    <th class="border p-2 text-left w-1/3">Unterschiede</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="border p-2 font-semibold">Rolle nicht-staatlicher Gewaltakteure</td>
-                                    <td class="border p-0"><textarea id="comp-common-actors" class="w-full h-24 p-2 border-0 focus:ring-0 resize-none"></textarea></td>
-                                    <td class="border p-0"><textarea id="comp-diff-actors" class="w-full h-24 p-2 border-0 focus:ring-0 resize-none"></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td class="border p-2 font-semibold">Rolle externer Interventionen</td>
-                                    <td class="border p-0"><textarea id="comp-common-interv" class="w-full h-24 p-2 border-0 focus:ring-0 resize-none"></textarea></td>
-                                    <td class="border p-0"><textarea id="comp-diff-interv" class="w-full h-24 p-2 border-0 focus:ring-0 resize-none"></textarea></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quellen: Séguy, Franck (2014): La catastrophe de janvier 2010. L'Harmattan; Dubois, Laurent (2012): Haiti: The Aftershocks of History. Metropolitan Books; Hallward, Peter (2007): Damming the Flood. Verso.</p>
+                <a href="https://www.bpb.de/kurz-knapp/hintergrund-aktuell/516677/haiti-in-der-krise/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> bpb: Haiti in der Krise – Hintergrund aktuell</a>
+                <a href="https://www.giga-hamburg.de/de/publikationen/giga-focus/haiti-am-abgrund" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> GIGA Focus: Haiti am Abgrund</a>
             </div>
-        </div>
+        </details>
 
-        <div id="transfer" class="tab-content">
-            <div class="card p-8">
-                <h2 class="text-3xl mb-6 border-b pb-2 text-teal-700">5. Transfer: Policy-Paper</h2>
-                <p class="mb-4">Sie sind Berater des Auswärtigen Amtes. Entwickeln Sie eine Handlungsempfehlung für den Umgang mit Haiti.</p>
-                
-                <div class="flex gap-4 mb-6 no-print overflow-x-auto pb-2">
-                    <div class="min-w-[200px] bg-white border rounded p-4 text-center cursor-pointer hover:shadow-md transition">
-                        <i class="fas fa-fighter-jet text-3xl text-red-500 mb-2"></i>
-                        <div class="font-bold text-sm">Militärische Intervention</div>
-                        <div class="text-xs text-gray-500 mt-1">Sicherheit erzwingen</div>
-                    </div>
-                    <div class="min-w-[200px] bg-white border rounded p-4 text-center cursor-pointer hover:shadow-md transition">
-                        <i class="fas fa-hand-holding-usd text-3xl text-green-500 mb-2"></i>
-                        <div class="font-bold text-sm">Entwicklungshilfe</div>
-                        <div class="text-xs text-gray-500 mt-1">Strukturen aufbauen</div>
-                    </div>
-                    <div class="min-w-[200px] bg-white border rounded p-4 text-center cursor-pointer hover:shadow-md transition">
-                        <i class="fas fa-ban text-3xl text-gray-500 mb-2"></i>
-                        <div class="font-bold text-sm">Containment</div>
-                        <div class="text-xs text-gray-500 mt-1">Abschottung / Isolation</div>
-                    </div>
+        <!-- Material E: Aktuelle Lage -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material E</span> Die aktuelle Lage: Gangherrschaft und Staatsversagen (2024/25)</summary>
+            <div class="dropdown-content">
+                <div class="academic-text">
+                    <p>Die Ermordung von Präsident Jovenel Moïse am 7. Juli 2021 durch ein Kommando mutmaßlicher kolumbianischer Söldner markierte den vorläufigen Tiefpunkt des haitianischen Staatszerfalls. Moïse hatte seit Februar 2020 per Dekret ohne gewähltes Parlament regiert und das Land in eine Verfassungskrise gesteuert, aus der es bis heute keinen Ausweg gefunden hat. Nach seinem Tod gab es keine verfassungsmäßig legitimierte Nachfolge, da weder ein funktionsfähiges Parlament noch ein Verfassungsgericht existierte, das eine ordnungsgemäße Transition hätte gewährleisten können.</p>
+                    <p>In dieses Machtvakuum stießen kriminelle Allianzen, die bereits unter Moïses Amtszeit erstarkt waren. Die Allianz „G9 an fanmi e alye" (G9 und Familie und Verbündete) unter Führung des ehemaligen Polizeibeamten Jimmy „Barbecue" Chérizier vereinte mehrere Gangs der Hauptstadt Port-au-Prince zu einer koordinierten Kraft, die bis Anfang 2024 schätzungsweise 80 Prozent des Stadtgebiets kontrollierte. Chérizier, der sich selbst als Revolutionär und Beschützer der Armen inszeniert, führte im Februar und März 2024 einen koordinierten Angriff auf staatliche Einrichtungen durch, bei dem Gefängnisse gestürmt und über 4.000 Häftlinge befreit wurden, Polizeistationen und der internationale Flughafen unter Beschuss gerieten, und das politische System faktisch zum Erliegen gebracht wurde.</p>
+                    <p>Die humanitäre Situation ist katastrophal. Nach Angaben des UN-Büros für die Koordinierung humanitärer Angelegenheiten (OCHA) waren Anfang 2025 mehr als 5,5 Millionen Menschen in Haiti auf humanitäre Hilfe angewiesen, das entspricht nahezu der Hälfte der Gesamtbevölkerung. Die Blockade der Häfen durch bewaffnete Gruppen führte zu extremem Treibstoffmangel, der wiederum die Wasseraufbereitung, die medizinische Versorgung und den Transport von Hilfsgütern zum Erliegen brachte. Ein erneuter Cholera-Ausbruch seit Oktober 2022 traf eine Bevölkerung, deren Gesundheitsinfrastruktur de facto nicht mehr existiert. Die Ernährungslage wurde von der internationalen Gemeinschaft als akute Notlage der Stufe 4 (von 5) auf der IPC-Skala eingestuft, was bedeutet, dass große Teile der Bevölkerung von Hungersnot bedroht sind.</p>
+                    <p>Auf politischer Ebene wurde im April 2024 ein sogenannter Transitional Presidential Council (Conseil présidentiel de transition) eingesetzt, der die Regierungsgeschäfte bis zur Abhaltung von Wahlen führen soll. Doch die Zusammensetzung dieses Rates, an dem verschiedene politische Fraktionen und Interessengruppen beteiligt sind, wird als Kompromiss mit den Strukturen wahrgenommen, die Haiti in die aktuelle Krise geführt haben. Die gleichzeitig beschlossene Entsendung einer von Kenia geführten Multinational Security Support Mission (MSS) mit bis zu 2.500 Sicherheitskräften aus verschiedenen Staaten begann im Juni 2024, verfügt aber weder über ein robustes UN-Mandat noch über ausreichende Finanzierung und wird von vielen Haitianern mit dem gleichen Misstrauen betrachtet wie die vorangegangene MINUSTAH-Mission.</p>
                 </div>
-
-                <div class="student-work bg-teal-50 p-6 rounded-xl border border-teal-200">
-                    <label class="block text-sm font-bold mb-2">Ihre Empfehlung (Begründetes Urteil):</label>
-                    <p class="text-xs text-gray-600 mb-2">Berücksichtigen Sie das Spannungsfeld zwischen Souveränität und Schutzverantwortung (R2P).</p>
-                    <textarea id="transfer-recommendation" class="w-full h-48 p-4 border rounded-lg bg-white shadow-inner" placeholder="Es wird empfohlen, dass... weil... Ein zentrales Risiko hierbei ist..."></textarea>
-                </div>
+                <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quellen: OCHA Haiti Situation Reports (2024/25); International Crisis Group (2024): Haiti's Criminal Disorder; UN Security Council Reports S/2024/.</p>
+                <a href="https://www.unocha.org/haiti" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> UN OCHA Haiti – Aktuelle Lageberichte</a>
+                <a href="https://www.crisisgroup.org/latin-america-caribbean/haiti" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> International Crisis Group: Haiti-Analysen</a>
+                <a href="https://www.ipcinfo.org/ipc-country-analysis/details-map/en/c/1156958/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> IPC: Ernährungssicherheit Haiti (Aktuelle Analyse)</a>
             </div>
-        </div>
+        </details>
 
-        <div id="quellen" class="tab-content">
-            <div class="card p-8">
-                <h2 class="text-3xl mb-6 border-b pb-2 text-gray-800">6. Vertiefende Textanalyse</h2>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="bg-white border-2 border-gray-200 p-6 rounded shadow-sm h-fit">
-                        <div class="border-b mb-4 pb-2">
-                            <span class="bg-gray-200 text-gray-700 px-2 py-1 text-xs font-bold rounded">Material M1</span>
-                            <h4 class="font-serif font-bold text-lg mt-2">"Das Dilemma der Intervention"</h4>
-                            <p class="text-xs text-gray-500 italic">Auszug aus einem politikwissenschaftlichen Fachkommentar (2024)</p>
-                        </div>
-                        <p class="text-sm leading-relaxed text-justify font-serif mb-4">
-                            [...] Die internationale Gemeinschaft steht im Fall Haiti vor einer Paradoxie. Einerseits hat sich gezeigt, dass vergangene Interventionen – sei es durch die USA oder UN-Missionen wie MINUSTAH – die staatlichen Strukturen eher geschwächt als gestärkt haben. Sie schufen Abhängigkeiten und untergruben die lokale Legitimität. Externe Akteure werden oft nicht als Befreier, sondern als Besatzer wahrgenommen.
-                        </p>
-                        <p class="text-sm leading-relaxed text-justify font-serif mb-4">
-                            Andererseits ist die endogene Kraft zur Regeneration des Staates faktisch erschöpft. Wo das Gewaltmonopol privatisiert ist, wird Anarchie zum Geschäftsmodell der Eliten. Ohne ein von außen garantiertes Sicherheitsnetz kann kein politischer Prozess gedeihen. Doch jede Intervention, die nicht primär haitianisch geführt ist, läuft Gefahr, den Teufelskreis der Fragilität nur neu zu befeuern. Die Lösung liegt nicht in "State-Building" nach westlichem Blaupausen-Muster, sondern in einem "Hybrid Political Order"-Ansatz, der informelle Machtstrukturen nicht ignoriert, sondern transformiert. [...]
-                        </p>
-                    </div>
-
-                    <div class="student-work space-y-6">
-                        <div>
-                            <label class="font-bold text-sm block mb-1 text-blue-700">AFB I (Zusammenfassung):</label>
-                            <p class="text-xs text-gray-500 mb-2">Fassen Sie die Kernaussage des Autors bezüglich vergangener Interventionen zusammen.</p>
-                            <textarea id="txt-afb1" class="w-full h-24 p-3 border rounded focus:border-blue-500 transition"></textarea>
-                        </div>
-                        <div>
-                            <label class="font-bold text-sm block mb-1 text-blue-700">AFB II (Analyse):</label>
-                            <p class="text-xs text-gray-500 mb-2">Erläutern Sie den Begriff "Paradoxie" im Kontext des Textes unter Rückgriff auf Ihr Wissen über die Legitimitätsfunktion.</p>
-                            <textarea id="txt-afb2" class="w-full h-32 p-3 border rounded focus:border-blue-500 transition"></textarea>
-                        </div>
-                        <div>
-                            <label class="font-bold text-sm block mb-1 text-blue-700">AFB III (Erörterung):</label>
-                            <p class="text-xs text-gray-500 mb-2">Setzen Sie sich kritisch mit der These auseinander, dass "Anarchie zum Geschäftsmodell" werden kann.</p>
-                            <textarea id="txt-afb3" class="w-full h-32 p-3 border rounded focus:border-blue-500 transition"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="reflexion" class="tab-content">
-            <div class="card p-8 text-center">
-                <h2 class="text-3xl mb-6">Abschluss & Sicherung</h2>
-                <p class="mb-8 max-w-2xl mx-auto">Sie haben das Modul beendet. Bitte überprüfen Sie Ihre Eingaben auf Vollständigkeit. Erstellen Sie anschließend ein PDF für Ihre Unterlagen.</p>
-                
-                <div class="flex flex-wrap justify-center gap-4 no-print">
-                    <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition transform hover:-translate-y-1 flex items-center">
-                        <i class="fas fa-file-pdf text-xl mr-3"></i>
-                        Als PDF speichern / Drucken
-                    </button>
-                    
-                    <button onclick="resetModule()" class="bg-red-100 hover:bg-red-200 text-red-700 font-bold py-4 px-8 rounded-xl transition border border-red-200 flex items-center">
-                        <i class="fas fa-trash-alt text-xl mr-3"></i>
-                        Alle Daten löschen
-                    </button>
-                </div>
-
-                <div class="mt-12 text-left bg-yellow-50 p-6 rounded-lg border border-yellow-200 student-work">
-                    <h3 class="font-bold text-yellow-800 mb-2">Offene Fragen / Feedback für den Unterricht</h3>
-                    <textarea id="feedback" class="w-full h-24 p-3 bg-white border rounded" placeholder="Was blieb unklar? Welcher Aspekt sollte im Plenum diskutiert werden?"></textarea>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <footer class="bg-slate-900 text-slate-400 py-8 mt-12 no-print">
-        <div class="container mx-auto text-center px-4">
-            <p class="mb-2">Politik und Gesellschaft Q12 | Digitale Lernumgebung</p>
-            <p class="text-xs">Alle Daten werden ausschließlich lokal im Browser Ihres Endgeräts gespeichert.</p>
-        </div>
-    </footer>
-
-    <script>
-        // Konfiguration der Eingabefelder
-        const inputIds = [
-            'def-security', 'def-welfare', 'def-legitimacy',
-            'haiti-notes',
-            'rating-security', 'ana-security', 
-            'rating-welfare', 'ana-welfare',
-            'rating-legitimacy', 'ana-legitimacy',
-            'ana-synthesis',
-            'comp-common-actors', 'comp-diff-actors',
-            'comp-common-interv', 'comp-diff-interv',
-            'transfer-recommendation',
-            'txt-afb1', 'txt-afb2', 'txt-afb3',
-            'feedback'
-        ];
-
-        // Tab Switching Logik
-        function switchTab(tabId) {
-            // Inhalte umschalten
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+        <!-- AUFGABEN -->
+        <div class="task-block">
+            <div class="task-label"><i class="fas fa-pen mr-2"></i>Aufgabenblock 2: Fallstudie Haiti</div>
             
-            // Buttons aktualisieren
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            // Finde den Button, der diesen Tab aufruft
-            const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
-            if(activeBtn) activeBtn.classList.add('active');
+            <div class="task-instruction">
+                <strong>Aufgabe 2a:</strong> Lesen Sie Material D und E. Arbeiten Sie die strukturellen Ursachen heraus, die erklären, warum Haiti – trotz seiner frühen Unabhängigkeit – nie stabile staatliche Strukturen entwickeln konnte. Unterscheiden Sie dabei zwischen endogenen (inneren) und exogenen (äußeren) Faktoren und erläutern Sie deren Wechselwirkung.
+            </div>
+            <textarea id="haiti-notes" class="w-full h-36 p-3 mb-4 resize-none" placeholder="Ihr Text..."></textarea>
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+            <div class="task-instruction">
+                <strong>Aufgabe 2b:</strong> In Material E wird beschrieben, dass sich Jimmy Chérizier als „Revolutionär und Beschützer der Armen" inszeniert. Analysieren Sie, warum ein solches Narrativ in der haitianischen Bevölkerung auf Resonanz stoßen kann. Beziehen Sie sich dabei auf die in Material B beschriebene Substitution staatlicher Leistungen durch nicht-staatliche Akteure.
+            </div>
+            <textarea id="haiti-cherizier" class="w-full h-32 p-3 mb-4 resize-none" placeholder="Ihr Text..."></textarea>
 
-        // Speichern & Laden
-        function saveToLocal(id) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            localStorage.setItem('pug_q12_' + id, el.value);
-            showSaveIndicator();
-        }
+            <div class="task-instruction">
+                <strong>Aufgabe 2c:</strong> Recherchieren Sie mithilfe der weiterführenden Links (OCHA, Crisis Group, IPC) aktuelle Daten zur humanitären Situation in Haiti. Notieren Sie drei konkrete Befunde, die Sie in Ihrer späteren Analyse als Belege verwenden können, und geben Sie jeweils die Quelle an.
+            </div>
+            <textarea id="haiti-research" class="w-full h-32 p-3 resize-none" placeholder="Befund 1: ... (Quelle: ...)&#10;Befund 2: ... (Quelle: ...)&#10;Befund 3: ... (Quelle: ...)"></textarea>
+        </div>
+    </div>
+</div>
 
-        function loadFromLocal() {
-            inputIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                const saved = localStorage.getItem('pug_q12_' + id);
-                if (saved) el.value = saved;
-                
-                // Event Listener hinzufügen
-                el.addEventListener('input', () => saveToLocal(id));
-                el.addEventListener('change', () => saveToLocal(id)); // Für Selects
-            });
-        }
+<!-- ==================== TAB: ANALYSE ==================== -->
+<div id="analyse" class="tab-content">
+    <div class="card p-8">
+        <h2 class="text-3xl mb-6 border-b pb-2 text-blue-800">3. Systematische Diagnose</h2>
 
-        // Visuelles Feedback beim Speichern
-        let saveTimeout;
-        function showSaveIndicator() {
-            const ind = document.getElementById('save-indicator');
-            ind.classList.add('show');
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(() => {
-                ind.classList.remove('show');
-            }, 1500);
-        }
+        <p class="mb-6 text-gray-700 leading-relaxed">
+            Wenden Sie nun das Schneckener-Modell systematisch auf Ihre gesammelten Informationen an. Lesen Sie zunächst das zusätzliche Material zur Methodik der Analyse, bevor Sie Ihre Diagnose erstellen. Alle Bewertungen müssen durch konkrete Belege aus den Materialien gestützt werden.
+        </p>
 
-        // Reset Funktion
-        function resetModule() {
-            if(confirm("Warnung: Möchten Sie wirklich alle Ihre Eingaben unwiderruflich löschen?")) {
-                inputIds.forEach(id => localStorage.removeItem('pug_q12_' + id));
-                location.reload();
-            }
-        }
+        <!-- Material F: Analysemethodik -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material F</span> Methodischer Hinweis: Wie analysiert man fragile Staatlichkeit?</summary>
+            <div class="dropdown-content">
+                <div class="academic-text">
+                    <p>Die Anwendung des Schneckener-Modells auf einen konkreten Fallstaat erfordert ein systematisches Vorgehen, das über die bloße Zuordnung von Phänomenen zu den drei Dimensionen hinausgeht. Eine wissenschaftlich belastbare Analyse muss erstens die empirische Evidenz für jede Dimension zusammentragen, zweitens die Wechselwirkungen zwischen den Dimensionen herausarbeiten und drittens eine begründete Gesamteinschätzung vornehmen, die den Grad der Fragilität auf dem Spektrum zwischen Schwäche und Scheitern verortet.</p>
+                    <p>Für die Sicherheitsdimension sind folgende Leitfragen relevant: Wer kontrolliert das Staatsgebiet faktisch? Existiert ein funktionsfähiger Sicherheitsapparat (Polizei, Militär), und wenn ja, untersteht er einer demokratisch legitimierten Führung? Welche nicht-staatlichen Gewaltakteure sind präsent, und welche Teile des Territoriums oder welche Bevölkerungsgruppen entziehen sich dem staatlichen Zugriff? Wie hoch ist das Gewaltniveau, gemessen etwa an Mordraten, der Verbreitung von Kleinwaffen oder der Häufigkeit bewaffneter Auseinandersetzungen?</p>
+                    <p>Für die Wohlfahrtsdimension ist zu fragen: Welchen Anteil der Bevölkerung erreichen staatliche Dienstleistungen tatsächlich? Existieren funktionierende Bildungs- und Gesundheitssysteme, und wenn nicht, wer füllt die Lücke? Wie hoch ist die Steuerquote als Indikator für die Extraktionsfähigkeit des Staates? Welche wirtschaftlichen Strukturen dominieren (formelle Wirtschaft versus Schattenwirtschaft, legale versus illegale Wirtschaftskreisläufe)?</p>
+                    <p>Für die Legitimitätsdimension schließlich sind die folgenden Aspekte zu untersuchen: Wann fanden die letzten freien und fairen Wahlen statt? Existieren unabhängige Gerichte und Medien? Wie wird die Regierung von der Bevölkerung wahrgenommen, und gibt es Indikatoren für politische Partizipation oder deren Verweigerung? Gibt es verfassungsgemäße Mechanismen für den Machttransfer, und werden diese eingehalten?</p>
+                    <p>Entscheidend ist, dass die drei Dimensionen nicht isoliert betrachtet werden. Ein zentrales Merkmal fragiler Staaten ist die Verkettung von Erosionsprozessen: Der Verlust des Gewaltmonopols verhindert die Erbringung öffentlicher Güter, was die Legitimität untergräbt, was wiederum den Widerstand gegen staatliche Sicherheitskräfte befördert. Diese Abwärtsspirale, in der Forschungsliteratur häufig als „Fragilitätsfalle" (fragility trap) bezeichnet, erklärt, warum staatliche Erosion häufig einen sich selbst verstärkenden Charakter hat und nur schwer von außen durchbrochen werden kann.</p>
+                </div>
+                <a href="https://www.oecd.org/dac/conflict-fragility-resilience/listofstateoffragility.htm" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> OECD: States of Fragility Report (Vergleichende Analyse)</a>
+            </div>
+        </details>
 
-        // Initialisierung
-        document.addEventListener('DOMContentLoaded', () => {
-            loadFromLocal();
-            // Startseite als Default, falls nicht anders gewünscht
-            if(!document.querySelector('.tab-content.active')) {
-                switchTab('start');
-            }
-        });
-    </script>
+        <!-- AUFGABEN: Analyse -->
+        <div class="task-block">
+            <div class="task-label"><i class="fas fa-pen mr-2"></i>Aufgabenblock 3: Diagnose nach Schneckener</div>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 3a – Sicherheitsfunktion:</strong> Beantworten Sie die in Material F genannten Leitfragen für den Fall Haiti. Stützen Sie Ihre Analyse auf die Materialien D, E und Ihre eigene Recherche. Bewerten Sie abschließend den Zustand der Sicherheitsfunktion als „intakt", „defizitär" oder „kollabiert" und begründen Sie Ihre Einschätzung.
+            </div>
+            <div class="mb-2"><select id="rating-security" class="border p-2 rounded text-sm bg-white"><option value="-">Bewertung wählen...</option><option value="intakt">Intakt</option><option value="defizitär">Defizitär</option><option value="kollabiert">Kollabiert</option></select></div>
+            <textarea id="ana-security" class="w-full h-32 p-3 mb-6 resize-none" placeholder="Analyse und Belege..."></textarea>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 3b – Wohlfahrtsfunktion:</strong> Verfahren Sie analog für die Wohlfahrtsfunktion. Nutzen Sie die statistischen Daten (HDI, IPC-Skala) aus den Materialien und Ihre Rechercheergebnisse aus Aufgabe 2c als empirische Grundlage.
+            </div>
+            <div class="mb-2"><select id="rating-welfare" class="border p-2 rounded text-sm bg-white"><option value="-">Bewertung wählen...</option><option value="intakt">Intakt</option><option value="defizitär">Defizitär</option><option value="kollabiert">Kollabiert</option></select></div>
+            <textarea id="ana-welfare" class="w-full h-32 p-3 mb-6 resize-none" placeholder="Analyse und Belege..."></textarea>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 3c – Legitimitätsfunktion:</strong> Analysieren Sie die Legitimitätsdimension. Berücksichtigen Sie insbesondere die Tatsache, dass seit dem Tod von Moïse keine demokratisch legitimierte Regierung mehr existiert und der Übergangsrat von externen Akteuren eingesetzt wurde.
+            </div>
+            <div class="mb-2"><select id="rating-legitimacy" class="border p-2 rounded text-sm bg-white"><option value="-">Bewertung wählen...</option><option value="intakt">Intakt</option><option value="defizitär">Defizitär</option><option value="kollabiert">Kollabiert</option></select></div>
+            <textarea id="ana-legitimacy" class="w-full h-32 p-3 mb-6 resize-none" placeholder="Analyse und Belege..."></textarea>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 3d – Synthese:</strong> Klassifizieren Sie Haiti anhand der Schneckener-Typologie als Weak State, Failing State oder Collapsed State. Beziehen Sie sich auf alle drei Dimensionen und erläutern Sie, ob und warum Sie eine eindeutige Zuordnung für möglich oder problematisch halten. Gehen Sie dabei auch auf die in Material F beschriebene „Fragilitätsfalle" ein.
+            </div>
+            <textarea id="ana-synthesis" class="w-full h-36 p-3 resize-none" placeholder="Haiti ist als ... zu klassifizieren, da..."></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== TAB: VERGLEICH ==================== -->
+<div id="vergleich" class="tab-content">
+    <div class="card p-8">
+        <h2 class="text-3xl mb-6 border-b pb-2 text-indigo-700">4. Komparative Analyse: Somalia</h2>
+
+        <p class="mb-6 text-gray-700 leading-relaxed">
+            Für eine fundierte vergleichende Analyse müssen Sie sich zunächst das Fallbeispiel Somalia anhand der folgenden Materialien erarbeiten. Erst dann können Sie die Vergleichsaufgaben bearbeiten.
+        </p>
+
+        <!-- Material G: Somalia -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material G</span> Somalia: Vom Staatszerfall zur fragmentierten Ordnung</summary>
+            <div class="dropdown-content">
+                <div class="academic-text">
+                    <p>Somalia gilt in der politikwissenschaftlichen Literatur als Paradebeispiel eines gescheiterten Staates, dessen Zerfall sich über mehr als drei Jahrzehnte erstreckt und dabei eine Dynamik entfaltet hat, die das Konzept der „Staatlichkeit" selbst in Frage stellt. Der Zusammenbruch des somalischen Zentralstaates im Jahr 1991, als das Regime von Siad Barre nach einem langwierigen Bürgerkrieg gestürzt wurde, markiert den Beginn einer Periode, in der keinerlei zentrale Autorität das Staatsterritorium kontrollierte.</p>
+                    <p>Anders als im Fall Haiti, wo die Grundstrukturen staatlicher Institutionen zumindest formal weiterbestehen, löste sich in Somalia das gesamte Institutionengefüge auf. Es gab keine Armee, keine Polizei, keine Justiz, keine Verwaltung und keine diplomatische Vertretung. In dieses Vakuum traten Clan-Strukturen, die in der somalischen Gesellschaft seit Jahrhunderten die primäre Form sozialer Organisation darstellen. Das Clan-System, das auf patrilinearer Abstammung basiert und die somalische Gesellschaft in ein hierarchisches Geflecht von Clan-Familien, Clans, Sub-Clans und Lineages gliedert, übernahm die Funktionen, die der Staat nicht mehr erfüllen konnte: Streitschlichtung, Schutz, wirtschaftlicher Austausch und soziale Absicherung.</p>
+                    <p>Die internationale Reaktion auf den somalischen Staatszerfall war ebenso folgenreich wie gescheitert. Die US-geführte Operation Restore Hope von 1992 bis 1993, die zunächst als humanitäre Intervention zur Bekämpfung einer verheerenden Hungersnot begann, mündete in die „Schlacht von Mogadischu" im Oktober 1993, bei der 18 amerikanische Soldaten getötet wurden. Dieses Trauma führte zum hastigen Rückzug der USA und zu einer generellen Interventionsmüdigkeit der internationalen Gemeinschaft, die Somalia für mehr als ein Jahrzehnt sich selbst überließ.</p>
+                    <p>In der Folge bildeten sich drei distinkte Gebiete mit unterschiedlichen Governance-Strukturen heraus. Somaliland im Nordwesten erklärte 1991 einseitig seine Unabhängigkeit und entwickelte sich zu einem funktionierenden De-facto-Staat mit eigener Verfassung, gewähltem Parlament, Polizei und Militär, der international jedoch bis heute nicht anerkannt wird. Puntland im Nordosten etablierte sich 1998 als autonome Region, die formal die Einheit Somalias anerkennt, aber de facto eigenständig agiert. Der Süden und Zentral-Somalia, einschließlich der Hauptstadt Mogadischu, blieben hingegen ein Kampfgebiet rivalisierender Warlords, islamistischer Bewegungen und transnationaler krimineller Netzwerke.</p>
+                    <p>Das Aufkommen der Union islamischer Gerichte (UIC) ab 2005 und insbesondere deren militärischer Arm, die Harakat al-Shabaab al-Mujahideen (Al-Shabaab), veränderte die Dynamik des somalischen Konflikts grundlegend. Al-Shabaab, die zeitweise große Teile Süd- und Zentral-Somalias einschließlich Mogadischus kontrollierte, bot eine Form islamistischer Governance, die grundlegende Sicherheit und Streitschlichtung auf Basis der Scharia gewährleistete, gleichzeitig aber durch extreme Brutalität, Zwangsrekrutierung und terroristische Anschläge auch außerhalb Somalias (insbesondere in Kenia) gekennzeichnet war. Die Gruppe finanziert sich durch Steuern und Schutzgelderpressung in den von ihr kontrollierten Gebieten, durch Kohleexporte und durch Verbindungen zu transnationalen kriminellen Netzwerken.</p>
+                    <p>Die seit 2012 bestehende Bundesregierung Somalias, die durch einen von internationalen Akteuren moderierten Prozess eingesetzt wurde, kontrolliert mit Unterstützung der Mission der Afrikanischen Union (AMISOM, seit 2022 ATMIS) nur begrenzte Teile des Landes, vor allem Mogadischu und einige größere Städte. Die Sicherheitslage bleibt extrem fragil, wobei Al-Shabaab regelmäßig Anschläge auch in der Hauptstadt verübt. Der politische Prozess wird durch die Konkurrenz zwischen der Bundesregierung und den föderalen Mitgliedsstaaten zusätzlich kompliziert, da letztere eigene Sicherheitskräfte unterhalten und häufig mit der Zentralregierung im Konflikt stehen.</p>
+                </div>
+                <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quellen: Menkhaus, Ken (2014): State Failure, State-Building, and Prospects for a „Functional Failed State" in Somalia. The Annals of the American Academy; Hagmann, Tobias / Hoehne, Markus (2009): Failures of the State Failure Debate. Journal of International Development.</p>
+                <a href="https://www.crisisgroup.org/africa/horn-africa/somalia" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> International Crisis Group: Somalia-Analysen</a>
+                <a href="https://www.bpb.de/themen/kriege-konflikte/dossier-kriege-konflikte/54556/somalia/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> bpb: Somalia – Dossier Kriege & Konflikte</a>
+            </div>
+        </details>
+
+        <!-- Material H: Somaliland -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material H</span> Exkurs: Das Phänomen Somaliland – Staatlichkeit ohne Anerkennung</summary>
+            <div class="dropdown-content">
+                <div class="academic-text">
+                    <p>Somaliland stellt für die Politikwissenschaft eine bemerkenswerte Anomalie dar. Hier existiert ein Gebilde, das alle Merkmale eines funktionierenden Staates aufweist – definiertes Territorium, permanente Bevölkerung, effektive Regierung, Fähigkeit zu internationalen Beziehungen – und dennoch von keinem einzigen Mitgliedstaat der Vereinten Nationen diplomatisch anerkannt wird. Diese Diskrepanz zwischen empirischer Staatlichkeit und juristischer Anerkennung wirft grundlegende Fragen zum Konzept der Souveränität auf.</p>
+                    <p>Somaliland verfügt über eine durch Referendum bestätigte Verfassung (2001), ein Mehrparteiensystem mit regelmäßigen, von internationalen Beobachtern als weitgehend frei und fair bewerteten Wahlen, einen gewählten Präsidenten und ein Zweikammerparlament mit einer gewählten Abgeordnetenkammer und einem Ältestenrat (Guurti), der traditionelle Clan-Strukturen in das formale politische System integriert. Die Sicherheitslage ist im regionalen Vergleich bemerkenswert stabil, und Somaliland hat seit der Unabhängigkeitserklärung 1991 keinen größeren bewaffneten Konflikt erlebt. Die wirtschaftliche Entwicklung, obwohl durch die fehlende internationale Anerkennung und den damit verbundenen Ausschluss von internationalen Finanzinstitutionen und bilateraler Entwicklungshilfe erheblich gehemmt, hat ein Niveau erreicht, das deutlich über dem des südlichen Somalia liegt.</p>
+                    <p>Der Erfolg Somalilands wird von Forschern wie Markus Hoehne und Tobias Hagmann auf mehrere Faktoren zurückgeführt: die relative ethnische Homogenität (Dominanz des Isaaq-Clans), die Bottom-up-Friedensprozesse der 1990er Jahre, die traditionelle Autoritätsstrukturen einbezogen statt sie zu übergehen, sowie die bewusste Abgrenzung vom gescheiterten somalischen Zentralstaat. Somaliland zeigt damit, dass Staatlichkeit auch jenseits westlicher State-Building-Modelle entstehen kann, wenn lokale Akteure den Prozess selbst steuern.</p>
+                </div>
+                <a href="https://www.somalilandlaw.com/somaliland_constitution.htm" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> Verfassung der Republik Somaliland (Volltext)</a>
+            </div>
+        </details>
+
+        <!-- AUFGABEN: Vergleich -->
+        <div class="task-block">
+            <div class="task-label"><i class="fas fa-pen mr-2"></i>Aufgabenblock 4: Komparative Analyse</div>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 4a:</strong> Arbeiten Sie auf Grundlage der Materialien D, E und G die wesentlichen Gemeinsamkeiten und Unterschiede zwischen den Fällen Haiti und Somalia heraus. Konzentrieren Sie sich dabei auf die Rolle nicht-staatlicher Gewaltakteure: Vergleichen Sie die Gangs in Haiti (insbesondere G9) mit Al-Shabaab in Somalia hinsichtlich ihrer Struktur, ihrer Ziele und ihrer Beziehung zur Bevölkerung.
+            </div>
+            <textarea id="comp-common-actors" class="w-full h-36 p-3 mb-6 resize-none" placeholder="Vergleichende Analyse der nicht-staatlichen Gewaltakteure..."></textarea>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 4b:</strong> Vergleichen Sie die Rolle externer Interventionen in beiden Fällen. Berücksichtigen Sie die historische Dimension (US-Intervention in Haiti 1994, Operation Restore Hope in Somalia 1993) ebenso wie die aktuellen internationalen Missionen (MSS in Haiti, ATMIS in Somalia). Erörtern Sie, warum externe Interventionen in beiden Fällen keine nachhaltige Stabilisierung bewirken konnten.
+            </div>
+            <textarea id="comp-diff-interv" class="w-full h-36 p-3 mb-6 resize-none" placeholder="Vergleichende Analyse der externen Interventionen..."></textarea>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 4c:</strong> Lesen Sie Material H über Somaliland. Erörtern Sie, welche Lehren sich aus dem Fall Somaliland für die internationale Gemeinschaft ziehen lassen. Nehmen Sie Stellung zu der These, dass externally driven State-Building weniger erfolgversprechend ist als lokal geführte Friedens- und Staatsbildungsprozesse. Begründen Sie Ihre Position unter Bezugnahme auf die Materialien.
+            </div>
+            <textarea id="comp-somaliland" class="w-full h-36 p-3 resize-none" placeholder="Analyse und Stellungnahme..."></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== TAB: TRANSFER ==================== -->
+<div id="transfer" class="tab-content">
+    <div class="card p-8">
+        <h2 class="text-3xl mb-6 border-b pb-2 text-teal-700">5. Transfer: Policy-Analyse</h2>
+
+        <p class="mb-6 text-gray-700 leading-relaxed">
+            In diesem Abschnitt werden Sie zu politikberatender Analyse aufgefordert. Lesen Sie die folgenden Materialien zu verschiedenen Interventionsstrategien und deren theoretischen Grundlagen, bevor Sie Ihre eigene Handlungsempfehlung formulieren.
+        </p>
+
+        <!-- Material I: R2P -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material I</span> Die Responsibility to Protect (R2P): Zwischen Souveränität und Schutzverantwortung</summary>
+            <div class="dropdown-content">
+                <div class="academic-text">
+                    <p>Das Prinzip der Responsibility to Protect, das 2005 auf dem Weltgipfel der Vereinten Nationen von allen Mitgliedstaaten angenommen wurde, stellt einen der bedeutendsten normativen Entwicklungen im Völkerrecht des 21. Jahrhunderts dar. Die R2P basiert auf der Prämisse, dass Souveränität nicht nur ein Recht, sondern auch eine Verantwortung ist: Jeder Staat ist in erster Linie selbst dafür verantwortlich, seine Bevölkerung vor Völkermord, Kriegsverbrechen, ethnischer Säuberung und Verbrechen gegen die Menschlichkeit zu schützen. Wenn ein Staat diese Verantwortung offensichtlich nicht wahrnehmen kann oder will, geht die Schutzverantwortung auf die internationale Gemeinschaft über.</p>
+                    <p>Die R2P umfasst drei Säulen: Die erste Säule betont die primäre Verantwortung des einzelnen Staates, seine Bevölkerung zu schützen. Die zweite Säule verpflichtet die internationale Gemeinschaft, Staaten bei der Erfüllung dieser Verantwortung zu unterstützen, etwa durch Kapazitätsaufbau, Frühwarnung und diplomatische Mittel. Die dritte Säule schließlich erlaubt der internationalen Gemeinschaft, kollektive Maßnahmen durch den UN-Sicherheitsrat zu ergreifen, wenn ein Staat seine Bevölkerung „manifest" nicht schützt, einschließlich – als letztes Mittel – militärischer Intervention.</p>
+                    <p>Die Anwendung der R2P auf den Fall Haiti ist umstritten. Einerseits lassen sich die Zustände in Haiti, insbesondere die systematische Gewalt gegen die Zivilbevölkerung durch bewaffnete Gangs und die vollständige Unfähigkeit des Staates, seine Bürger zu schützen, als Situation interpretieren, in der die Schutzverantwortung auf die internationale Gemeinschaft übergeht. Andererseits wurde die R2P bisher primär auf Situationen angewandt, in denen der Staat selbst Gewalt gegen seine Bevölkerung ausübt (wie in Libyen 2011), nicht auf Fälle, in denen der Staat schlicht nicht mehr existiert. Die Kritik an der R2P, insbesondere aus dem Globalen Süden, betont zudem das Risiko des Missbrauchs als Legitimation für neokoloniale Interventionen und verweist darauf, dass die Libyen-Intervention von 2011 über ihr humanitäres Mandat hinausging und zum Regime-Change führte, was das Vertrauen in das R2P-Konzept nachhaltig beschädigte.</p>
+                </div>
+                <a href="https://www.globalr2p.org/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> Global Centre for the Responsibility to Protect</a>
+                <a href="https://www.un.org/en/genocideprevention/about-responsibility-to-protect.shtml" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> UN: About the Responsibility to Protect</a>
+            </div>
+        </details>
+
+        <!-- Material J: Interventionsstrategien -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material J</span> Interventionsstrategien im Vergleich: Möglichkeiten und Grenzen</summary>
+            <div class="dropdown-content">
+                <div class="academic-text">
+                    <p>Die politikwissenschaftliche Debatte über den Umgang mit fragilen Staaten kennt im Wesentlichen drei Grundstrategien, die jeweils unterschiedliche Annahmen über die Ursachen staatlicher Fragilität und die Möglichkeiten externer Einflussnahme zugrunde legen.</p>
+                    <p>Die erste Strategie, die als „robustes Peacebuilding" oder „militärgestütztes State-Building" bezeichnet werden kann, setzt auf die Wiederherstellung des staatlichen Gewaltmonopols durch externe Sicherheitskräfte als Vorbedingung für alle weiteren Reformprozesse. Diese Strategie, die etwa im Irak und in Afghanistan verfolgt wurde, geht davon aus, dass ohne ein Mindestmaß an physischer Sicherheit weder wirtschaftliche Entwicklung noch politische Partizipation möglich sind. Kritiker verweisen jedoch darauf, dass militärische Interventionen häufig unbeabsichtigte Folgen haben, lokale Machtstrukturen zerstören ohne funktionale Alternativen zu schaffen, und dass die Anwesenheit ausländischer Truppen die Legitimität einheimischer Institutionen untergräbt. Die Erfahrungen in Afghanistan, wo zwei Jahrzehnte massiver internationaler Präsenz nicht zur nachhaltigen Stabilisierung führten, haben diese Kritik eindrucksvoll bestätigt.</p>
+                    <p>Die zweite Strategie setzt auf entwicklungspolitische Zusammenarbeit und den gezielten Aufbau institutioneller Kapazitäten (Capacity Building). Dieser Ansatz, der von Organisationen wie der Weltbank und dem UNDP bevorzugt wird, konzentriert sich auf die Stärkung der Wohlfahrtsfunktion durch Investitionen in Bildung, Gesundheit, Infrastruktur und gute Regierungsführung (Good Governance). Die Annahme ist, dass ein Staat, der seinen Bürgern Dienstleistungen erbringt, Legitimität gewinnt und damit langfristig auch die Sicherheitslage verbessert. Kritiker dieses Ansatzes wenden ein, dass Entwicklungshilfe in fragilen Kontexten häufig die falschen Akteure stärkt, korrupte Eliten finanziert und Abhängigkeitsstrukturen schafft, die den Aufbau eigenständiger staatlicher Kapazitäten eher behindern als fördern.</p>
+                    <p>Die dritte Strategie, die als „Containment" oder auch als „benign neglect" beschrieben wird, akzeptiert die Realität staatlicher Fragilität und konzentriert sich darauf, deren grenzüberschreitende Auswirkungen (Terrorismus, Flucht, organisierte Kriminalität) einzudämmen, ohne den Versuch einer grundlegenden Transformation des betroffenen Staates zu unternehmen. Dieser Ansatz, der im Fall Somalia nach dem Scheitern der Operation Restore Hope faktisch über mehr als ein Jahrzehnt verfolgt wurde, wird von seinen Befürwortern mit der begrenzten Wirksamkeit und den hohen Kosten externer Interventionen begründet. Kritiker halten dem entgegen, dass Containment das Leid der betroffenen Bevölkerung ignoriert und langfristig höhere Kosten verursacht, da unbehandelte Krisen tendenziell eskalieren und auf Nachbarstaaten übergreifen.</p>
+                    <p>In der jüngeren Debatte gewinnt ein vierter Ansatz an Bedeutung, der als „Hybrid Political Orders" oder „negotiated statehood" bezeichnet wird. Dieser Ansatz, der maßgeblich von Forschern wie Volker Boege, Anne Brown und Kevin Clements entwickelt wurde, geht davon aus, dass in vielen fragilen Kontexten nicht der westliche Nationalstaat, sondern hybride Ordnungen, in denen formale staatliche Institutionen und informelle, traditionelle oder religiöse Autoritätsstrukturen nebeneinander existieren und interagieren, die realistische Alternative sind. Statt die informellen Strukturen zu bekämpfen oder zu ignorieren, schlägt dieser Ansatz vor, sie in den politischen Prozess einzubinden und schrittweise zu transformieren. Der Fall Somaliland (Material H) wird häufig als positives Beispiel für diesen Ansatz angeführt.</p>
+                </div>
+                <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quellen: Paris, Roland (2004): At War's End. Cambridge UP; Boege, Volker et al. (2009): On Hybrid Political Orders and Emerging States. Berghof Handbook; Doyle, Michael / Sambanis, Nicholas (2006): Making War and Building Peace. Princeton UP.</p>
+                <a href="https://www.berghof-foundation.org/publications/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> Berghof Foundation: Publikationen zu Friedens- und Konfliktforschung</a>
+                <a href="https://www.worldbank.org/en/topic/fragilityconflictviolence" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> World Bank: Fragility, Conflict & Violence</a>
+            </div>
+        </details>
+
+        <!-- AUFGABEN: Transfer -->
+        <div class="task-block">
+            <div class="task-label"><i class="fas fa-pen mr-2"></i>Aufgabenblock 5: Policy-Analyse und Urteilsbildung</div>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 5a:</strong> Lesen Sie Material I. Erörtern Sie, ob die Responsibility to Protect auf den Fall Haiti anwendbar ist. Berücksichtigen Sie dabei sowohl die drei Säulen der R2P als auch die im Text genannte Kritik aus dem Globalen Süden. Beziehen Sie sich auf die historische Erfahrung Haitis mit externen Interventionen (Material D und E).
+            </div>
+            <textarea id="transfer-r2p" class="w-full h-36 p-3 mb-6 resize-none" placeholder="Erörterung zur Anwendbarkeit der R2P auf Haiti..."></textarea>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 5b:</strong> Studieren Sie Material J. Sie sind als Beraterin oder Berater des Auswärtigen Amtes aufgefordert, eine Handlungsempfehlung für den Umgang mit Haiti zu formulieren. Wägen Sie die vier dargestellten Strategien gegeneinander ab und begründen Sie, welche Strategie oder welche Kombination von Strategien Sie empfehlen würden. Berücksichtigen Sie dabei die spezifischen Bedingungen des Falls Haiti (Gangherrschaft, Nähe zu den USA, historische Belastungen, fehlende Legitimität) sowie die Lehren aus dem Vergleich mit Somalia.
+            </div>
+            <textarea id="transfer-recommendation" class="w-full h-48 p-3 mb-6 resize-none" placeholder="Handlungsempfehlung: Es wird empfohlen, dass..."></textarea>
+
+            <div class="task-instruction">
+                <strong>Aufgabe 5c (Vertiefung):</strong> Nehmen Sie kritisch Stellung zu der folgenden These: „Das Scheitern externer Interventionen in fragilen Staaten liegt nicht an der mangelnden Bereitschaft der internationalen Gemeinschaft, sondern an einem fundamentalen Konstruktionsfehler: Der Versuch, westliche Staatlichkeit in Kontexte zu exportieren, in denen die gesellschaftlichen Voraussetzungen dafür nicht gegeben sind, muss zwangsläufig scheitern." Nutzen Sie die Materialien G, H und J als Grundlage Ihrer Argumentation.
+            </div>
+            <textarea id="transfer-critical" class="w-full h-36 p-3 resize-none" placeholder="Kritische Stellungnahme..."></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== TAB: TEXTANALYSE ==================== -->
+<div id="quellen" class="tab-content">
+    <div class="card p-8">
+        <h2 class="text-3xl mb-6 border-b pb-2 text-gray-800">6. Vertiefende Textanalyse</h2>
+
+        <p class="mb-6 text-gray-700 leading-relaxed">
+            Dieser Abschnitt fordert Sie zu einer quellengestützten Textanalyse auf, wie sie in der Oberstufe und im Abitur erwartet wird. Lesen Sie die Materialien sorgfältig und bearbeiten Sie die Aufgaben nach den drei Anforderungsbereichen (AFB I–III).
+        </p>
+
+        <!-- Material M1 -->
+        <details class="material-dropdown" open>
+            <summary><span class="source-tag">Material M1</span> „Das Dilemma der Intervention" – Fachkommentar</summary>
+            <div class="dropdown-content">
+                <div class="academic-text" style="background: #faf9f6; border: 1px solid #e0ddd6; padding: 1.5rem; border-radius: 8px;">
+                    <p style="text-indent: 0;">[...] Die internationale Gemeinschaft steht im Fall Haiti vor einer Paradoxie. Einerseits hat sich gezeigt, dass vergangene Interventionen – sei es durch die USA oder UN-Missionen wie MINUSTAH – die staatlichen Strukturen eher geschwächt als gestärkt haben. Sie schufen Abhängigkeiten und untergruben die lokale Legitimität. Externe Akteure werden oft nicht als Befreier, sondern als Besatzer wahrgenommen.</p>
+                    <p>Andererseits ist die endogene Kraft zur Regeneration des Staates faktisch erschöpft. Wo das Gewaltmonopol privatisiert ist, wird Anarchie zum Geschäftsmodell der Eliten. Ohne ein von außen garantiertes Sicherheitsnetz kann kein politischer Prozess gedeihen. Doch jede Intervention, die nicht primär haitianisch geführt ist, läuft Gefahr, den Teufelskreis der Fragilität nur neu zu befeuern.</p>
+                    <p>Die Lösung liegt nicht in „State-Building" nach westlichem Blaupausen-Muster, sondern in einem „Hybrid Political Order"-Ansatz, der informelle Machtstrukturen nicht ignoriert, sondern transformiert. Das bedeutet konkret: Die internationale Gemeinschaft muss anerkennen, dass die Gangstrukturen in Port-au-Prince nicht nur Symptome des Staatsversagens sind, sondern zugleich Ausdruck einer informellen Ordnung, die reale Funktionen für die Bevölkerung erfüllt – Schutz, Zugang zu Ressourcen, Identität. Jeder Versuch, diese Strukturen ausschließlich militärisch zu zerschlagen, ohne funktionale Alternativen zu bieten, wird scheitern.</p>
+                    <p>Was Haiti braucht, ist ein differenzierter Ansatz: kurzfristig eine Sicherheitsgarantie, die den humanitären Zugang sichert, mittelfristig einen inklusiven politischen Prozess, der auch informelle Machthaber einbindet – nicht um sie zu legitimieren, sondern um sie in einen verbindlichen Rahmen zu zwingen – und langfristig den Aufbau genuiner haitianischer Institutionen, die ihre Legitimität nicht aus internationaler Anerkennung, sondern aus der Leistungserbringung für die Bevölkerung ableiten. [...]</p>
+                </div>
+                <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quelle: Auszug aus einem politikwissenschaftlichen Fachkommentar (2024). Adaptiert für den Unterrichtsgebrauch.</p>
+            </div>
+        </details>
+
+        <!-- Material M2 -->
+        <details class="material-dropdown">
+            <summary><span class="source-tag">Material M2</span> „Die Ökonomie des Chaos" – Entwicklungspolitische Perspektive</summary>
+            <div class="dropdown-content">
+                <div class="academic-text" style="background: #faf9f6; border: 1px solid #e0ddd6; padding: 1.5rem; border-radius: 8px;">
+                    <p style="text-indent: 0;">[...] Die gängige Analyse fragiler Staaten übersieht einen entscheidenden Faktor: Staatszerfall ist nicht für alle Akteure ein Problem. Für eine erstaunlich große Zahl von Profiteuren ist die Abwesenheit staatlicher Ordnung ein Geschäftsmodell. Die ökonomische Logik des Chaos folgt einer bestechend einfachen Rationalität: Wo kein Staat existiert, existieren keine Steuern, keine Regulierung, keine Arbeitsschutzgesetze, keine Umweltauflagen. Die Drogenroute von Südamerika über Haiti in die Vereinigten Staaten generiert nach Schätzungen des UNODC jährlich Hunderte Millionen Dollar Umsatz, von denen ein erheblicher Teil in den Taschen haitianischer Eliten und Gangführer landet.</p>
+                    <p>Diese „politische Ökonomie des Konflikts" erklärt, warum Friedensabkommen scheitern und warum Akteure, die öffentlich den Frieden beschwören, heimlich den Krieg finanzieren. Sie erklärt auch, warum internationale Sanktionen häufig wirkungslos bleiben: Wer in einer Schattenwirtschaft operiert, ist von den formalen Finanzströmen der Weltwirtschaft ohnehin weitgehend abgekoppelt. Die Herausforderung besteht nicht nur darin, den Staat wieder aufzubauen, sondern darin, die ökonomischen Anreize so zu verändern, dass Frieden profitabler wird als Krieg.</p>
+                    <p>Mark Duffield hat in seiner einflussreichen Studie „Global Governance and the New Wars" argumentiert, dass die zeitgenössischen Konflikte in fragilen Staaten nicht als vormoderne Rückfälle in Barbarei zu verstehen sind, sondern als durchaus moderne Formen der politischen Ökonomie, die eng mit den Strukturen der Globalisierung verflochten sind. Die Gangs von Port-au-Prince operieren nicht in einem Vakuum, sondern in einem transnationalen Netzwerk aus Waffenhandel (Waffen aus den USA), Drogenlogistik (Kokain aus Venezuela und Kolumbien) und Geldwäsche (über die Dominikanische Republik und darüber hinaus). Jede Analyse, die diese globalen Verflechtungen ignoriert und die Krise allein auf endogene Faktoren zurückführt, greift zu kurz. [...]</p>
+                </div>
+                <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quelle: Eigener Kommentar in Anlehnung an Duffield, Mark (2001): Global Governance and the New Wars; UNODC: Transnational Organized Crime in Central America and the Caribbean (2012).</p>
+            </div>
+        </details>
+
+        <!-- AUFGABEN: Textanalyse -->
+        <div class="task-block">
+            <div class="task-label"><i class="fas fa-pen mr-2"></i>Aufgabenblock 6: Quellengestützte Textanalyse (AFB I–III)</div>
+
+            <div class="task-instruction">
+                <strong>AFB I – Zusammenfassung (Material M1):</strong> Fassen Sie die Kernaussage des Autors von Material M1 zusammen. Arbeiten Sie heraus, welche „Paradoxie" der Text beschreibt und welchen Lösungsansatz der Autor vorschlägt. Verwenden Sie dabei Ihre eigenen Worte und vermeiden Sie wörtliche Übernahmen.
+            </div>
+            <textarea id="txt-afb1" class="w-full h-32 p-3 mb-6 resize-none" placeholder="Zusammenfassung..."></textarea>
+
+            <div class="task-instruction">
+                <strong>AFB II – Analyse (Material M1 und M2):</strong> Analysieren Sie die Argumentation beider Texte im Hinblick auf die Frage, warum externe Interventionen in Haiti scheitern. Arbeiten Sie heraus, welche unterschiedlichen Erklärungsansätze die Texte verfolgen: Material M1 argumentiert primär auf der politisch-institutionellen Ebene, Material M2 auf der ökonomischen Ebene. Erläutern Sie, wie sich beide Perspektiven ergänzen, und beziehen Sie Ihr Wissen über das Schneckener-Modell (Material B) in die Analyse ein.
+            </div>
+            <textarea id="txt-afb2" class="w-full h-40 p-3 mb-6 resize-none" placeholder="Analyse..."></textarea>
+
+            <div class="task-instruction">
+                <strong>AFB III – Erörterung (Material M2):</strong> In Material M2 wird die These vertreten, dass „Anarchie zum Geschäftsmodell" werden kann und dass die Krise in Haiti nicht isoliert von globalen Strukturen der organisierten Kriminalität verstanden werden kann. Setzen Sie sich kritisch mit dieser These auseinander. Berücksichtigen Sie dabei die folgenden Aspekte: Inwieweit entlastet die Betonung externer Faktoren die haitianischen Akteure von ihrer Verantwortung? Welche Konsequenzen ergeben sich aus dieser Perspektive für die in Material J dargestellten Interventionsstrategien? Nutzen Sie für Ihre Argumentation alle bisherigen Materialien und Ihre eigene Recherche.
+            </div>
+            <textarea id="txt-afb3" class="w-full h-44 p-3 resize-none" placeholder="Kritische Erörterung..."></textarea>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== TAB: REFLEXION ==================== -->
+<div id="reflexion" class="tab-content">
+    <div class="card p-8 text-center">
+        <h2 class="text-3xl mb-6">Abschluss & Sicherung</h2>
+        <p class="mb-8 max-w-2xl mx-auto leading-relaxed">Sie haben das Modul beendet. Bitte überprüfen Sie Ihre Eingaben auf Vollständigkeit und inhaltliche Konsistenz. Achten Sie darauf, dass Sie in allen Aufgaben auf die bereitgestellten Materialien Bezug genommen haben. Erstellen Sie anschließend ein PDF für Ihre Unterlagen.</p>
+        
+        <div class="flex flex-wrap justify-center gap-4 no-print">
+            <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition transform hover:-translate-y-1 flex items-center">
+                <i class="fas fa-file-pdf text-xl mr-3"></i>Als PDF speichern / Drucken
+            </button>
+            <button onclick="resetModule()" class="bg-red-100 hover:bg-red-200 text-red-700 font-bold py-4 px-8 rounded-xl transition border border-red-200 flex items-center">
+                <i class="fas fa-trash-alt text-xl mr-3"></i>Alle Daten löschen
+            </button>
+        </div>
+        
+        <div class="mt-12 text-left bg-yellow-50 p-6 rounded-lg border border-yellow-200 student-work">
+            <h3 class="font-bold text-yellow-800 mb-4" style="font-family: 'Merriweather', serif;">Abschlussreflexion</h3>
+            <div class="task-instruction mb-2">
+                Formulieren Sie in einem kurzen Absatz, welche Erkenntnis Sie aus der Beschäftigung mit fragiler Staatlichkeit gewonnen haben, die über das rein Fachliche hinausgeht. Was hat Sie überrascht? Welche Frage ist offen geblieben und sollte im Plenum diskutiert werden?
+            </div>
+            <textarea id="feedback" class="w-full h-32 p-3 bg-white border rounded" placeholder="Ihre Reflexion..."></textarea>
+        </div>
+    </div>
+</div>
+
+</main>
+
+<footer class="bg-slate-900 text-slate-400 py-8 mt-12 no-print">
+    <div class="container mx-auto text-center px-4">
+        <p class="mb-2">Politik und Gesellschaft Q12 | Digitale Lernumgebung</p>
+        <p class="text-xs">Alle Daten werden ausschließlich lokal im Browser Ihres Endgeräts gespeichert.</p>
+    </div>
+</footer>
+
+<script>
+const inputIds = [
+    'def-security', 'def-welfare', 'def-legitimacy',
+    'haiti-notes', 'haiti-cherizier', 'haiti-research',
+    'rating-security', 'ana-security',
+    'rating-welfare', 'ana-welfare',
+    'rating-legitimacy', 'ana-legitimacy',
+    'ana-synthesis',
+    'comp-common-actors', 'comp-diff-interv', 'comp-somaliland',
+    'transfer-r2p', 'transfer-recommendation', 'transfer-critical',
+    'txt-afb1', 'txt-afb2', 'txt-afb3',
+    'feedback'
+];
+
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(btn => btn.getAttribute('onclick').includes(tabId));
+    if(activeBtn) activeBtn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function saveToLocal(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    localStorage.setItem('pug_q12_v2_' + id, el.value);
+    showSaveIndicator();
+}
+
+function loadFromLocal() {
+    inputIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const saved = localStorage.getItem('pug_q12_v2_' + id);
+        if (saved) el.value = saved;
+        el.addEventListener('input', () => saveToLocal(id));
+        el.addEventListener('change', () => saveToLocal(id));
+    });
+}
+
+let saveTimeout;
+function showSaveIndicator() {
+    const ind = document.getElementById('save-indicator');
+    ind.classList.add('show');
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => { ind.classList.remove('show'); }, 1500);
+}
+
+function resetModule() {
+    if(confirm("Warnung: Möchten Sie wirklich alle Ihre Eingaben unwiderruflich löschen?")) {
+        inputIds.forEach(id => localStorage.removeItem('pug_q12_v2_' + id));
+        location.reload();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadFromLocal();
+    if(!document.querySelector('.tab-content.active')) {
+        switchTab('start');
+    }
+});
+</script>
 </body>
 </html>

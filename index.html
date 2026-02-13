@@ -147,6 +147,66 @@ details.material-dropdown .dropdown-content { padding: 0 1.5rem 1.5rem 1.5rem; }
 
 /* Glossary */
 .glossary-term { cursor: help; border-bottom: 2px dotted var(--primary); color: var(--primary); position: relative; font-weight: 500; }
+
+/* Solution button & dropdown */
+.solution-wrapper { margin-top: 0.5rem; margin-bottom: 1.25rem; }
+.solution-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 1rem;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 6px;
+    border: 1.5px solid #d4cfc7;
+    background: #f0eeea;
+    color: #8a8478;
+    cursor: not-allowed;
+    transition: all 0.3s;
+    user-select: none;
+}
+.solution-btn.unlocked {
+    background: linear-gradient(135deg, #e8f5e9, #f1f8f2);
+    border-color: var(--accent);
+    color: #1b7a3d;
+    cursor: pointer;
+}
+.solution-btn.unlocked:hover {
+    background: linear-gradient(135deg, #c8e6c9, #e8f5e9);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(16,185,129,0.15);
+}
+.solution-btn .lock-icon { font-size: 0.75rem; }
+.solution-btn .word-count { font-weight: 400; font-size: 0.75rem; opacity: 0.8; margin-left: 0.25rem; }
+.solution-box {
+    display: none;
+    margin-top: 0.75rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+    border: 1px solid #86efac;
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: #1e4d2b;
+    animation: fadeIn 0.4s ease-out;
+}
+.solution-box.visible { display: block; }
+.solution-box strong { color: #15803d; }
+.solution-box .solution-label {
+    display: inline-block;
+    background: #15803d;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.1rem 0.5rem;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
 .glossary-popup { display: none; position: absolute; background: #1e293b; color: white; padding: 12px; border-radius: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 50; width: 280px; font-size: 0.85rem; line-height: 1.5; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 8px; font-family: 'Source Sans 3', sans-serif; }
 .glossary-term:hover .glossary-popup { display: block; }
 
@@ -178,18 +238,63 @@ textarea:focus, select:focus {
     outline: none;
 }
 
-/* Print */
+/* Print – nur Überschriften, Aufgabenstellungen und Schülereingaben */
 @media print {
-    body { background: white !important; color: black !important; }
-    .no-print, nav, header, footer, .roadmap-container, .chart-visuals { display: none !important; }
-    .tab-content { display: block !important; margin-bottom: 3rem; page-break-after: always; }
-    .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
-    details.material-dropdown { border: 1px solid #999; }
-    details.material-dropdown[open] .dropdown-content { display: block; }
-    textarea, select { border: 1px solid #000 !important; font-family: 'Courier New', monospace; font-size: 11pt; }
-    h2 { border-bottom: 2px solid black !important; }
-    .student-work { display: block !important; }
+    body { background: white !important; color: black !important; font-size: 11pt; }
+    .no-print, nav, header, footer, .roadmap-container, .chart-visuals, .solution-wrapper { display: none !important; }
+    
+    /* Alle Tabs sichtbar machen */
+    .tab-content { display: block !important; margin-bottom: 2rem; page-break-after: always; }
+    
+    /* Dropdowns mit Materialien komplett ausblenden */
+    details.material-dropdown { display: none !important; }
+    
+    /* Einleitungstexte in den Tabs ausblenden (die p-Tags direkt in der card vor den Aufgaben) */
+    .card > p { display: none !important; }
+    
+    /* Externe Links ausblenden */
+    .external-link { display: none !important; }
+    
+    /* Bar-Charts und Videos ausblenden */
+    .bar-container, iframe, .chart-visuals { display: none !important; }
+    
+    /* Karten-Styling */
+    .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; padding: 1rem !important; }
+    
+    /* Überschriften immer sichtbar */
+    h2 { border-bottom: 2px solid black !important; font-size: 16pt !important; margin-bottom: 0.5rem !important; page-break-after: avoid; }
+    
+    /* Aufgabenblöcke sichtbar und gut lesbar */
+    .task-block { display: block !important; border: 2px solid #333 !important; padding: 1rem !important; margin-top: 0.5rem !important; break-inside: avoid; background: white !important; }
+    .task-label { font-size: 12pt !important; font-weight: bold !important; margin-bottom: 0.5rem !important; }
+    .task-instruction { font-size: 10pt !important; margin-bottom: 0.5rem !important; line-height: 1.4 !important; }
+    
+    /* Textareas und Selects sichtbar und druckbar */
+    textarea { 
+        border: 1px solid #000 !important; 
+        font-family: 'Courier New', monospace !important; 
+        font-size: 10pt !important; 
+        min-height: 4rem !important; 
+        page-break-inside: avoid;
+        background: #f9f9f9 !important;
+    }
+    select { border: 1px solid #000 !important; font-size: 10pt !important; }
+    
+    /* Startseite nicht drucken */
+    #start { display: none !important; }
+    
+    /* Print-Header anzeigen */
     .print-header { display: block !important; margin-bottom: 20px; border-bottom: 2px solid black; padding-bottom: 10px; }
+    
+    /* Glossary-Popups ausblenden */
+    .glossary-popup { display: none !important; }
+    
+    /* Grid-Layouts linearisieren */
+    .grid { display: block !important; }
+    
+    /* Reflexions-Seite: Buttons ausblenden, Textarea zeigen */
+    #reflexion .card { text-align: left !important; }
+    #reflexion button { display: none !important; }
 }
 .print-header { display: none; }
 </style>
@@ -309,7 +414,7 @@ textarea:focus, select:focus {
                 </div>
                 <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quelle: Zusammenfassende Darstellung nach Schneckener, Ulrich (2006): Fragile Staatlichkeit. „States at Risk" zwischen Stabilität und Scheitern. Baden-Baden: Nomos. Sowie: Schneckener, Ulrich (2004): States at Risk. Fragile Staaten als Sicherheits- und Entwicklungsproblem. SWP-Studie.</p>
                 <a href="https://www.swp-berlin.org/publikation/states-at-risk" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> SWP-Studie „States at Risk" (Original-Publikation)</a>
-                <a href="https://www.bpb.de/themen/kriege-konflikte/dossier-kriege-konflikte/54541/fragile-staatlichkeit-als-sicherheits-und-entwicklungsproblem/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> Bundeszentrale für politische Bildung: Fragile Staatlichkeit</a>
+                <a href="https://www.bpb.de/themen/kriege-konflikte/dossier-kriege-konflikte/54545/fragile-staatlichkeit-als-konfliktursache-und-moeglichkeiten-der-bearbeitung/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> Bundeszentrale für politische Bildung: Fragile Staatlichkeit als Konfliktursache</a>
             </div>
         </details>
 
@@ -335,17 +440,38 @@ textarea:focus, select:focus {
             <div class="task-instruction">
                 <strong>Aufgabe 1a:</strong> Lesen Sie Material A und B. Arbeiten Sie heraus, wie Schneckeners Sicherheitsfunktion auf Webers Konzept des Gewaltmonopols aufbaut. Erläutern Sie in eigenen Worten, warum Weber die physische Gewaltsamkeit als das dem Staat „spezifische Mittel" bezeichnet und welche Konsequenzen sich daraus für die Analyse fragiler Staaten ergeben.
             </div>
-            <textarea id="def-security" class="w-full h-28 p-3 mb-4 resize-none" placeholder="Ihr Text..."></textarea>
+            <textarea id="def-security" class="w-full h-28 p-3 mb-1 resize-none" placeholder="Ihr Text..."></textarea>
+            <div class="solution-wrapper" data-for="def-security">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box">
+                    <div class="solution-label">Lösungsvorschlag</div>
+                    <p>Schneckeners Sicherheitsfunktion baut direkt auf Webers Konzept des staatlichen Gewaltmonopols auf. Weber definiert den Staat als diejenige Gemeinschaft, die innerhalb eines Gebietes das Monopol legitimer physischer Gewaltsamkeit beansprucht. Er bezeichnet Gewalt als das dem Staat „spezifische Mittel", weil Gewalt zwar nicht das einzige, aber das für den Staat allein charakteristische Mittel der Herrschaft ist – andere Organisationen können überzeugen, wirtschaftlich handeln oder Normen setzen, aber nur der Staat darf legitim Zwang ausüben. Schneckener operationalisiert dieses abstrakte Konzept, indem er konkrete Indikatoren benennt: Kontrolle des gesamten Territoriums, Entwaffnung nicht-staatlicher Gewaltakteure, rechtsstaatlich kontrollierte Sicherheitsorgane. Für die Analyse fragiler Staaten ergibt sich daraus: Wo das Gewaltmonopol erodiert – etwa durch Milizen, Warlords oder kriminelle Gangs – ist die grundlegendste Dimension von Staatlichkeit betroffen, ohne die auch Wohlfahrt und Legitimität nicht aufrechterhalten werden können.</p>
+                </div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 1b:</strong> Erklären Sie auf Grundlage von Material B den Zusammenhang zwischen Wohlfahrtsfunktion und Legitimität. Schneckener argumentiert, dass die Substitution staatlicher Leistungen durch nicht-staatliche Akteure „langfristig die Legitimität des Staates selbst" untergräbt. Setzen Sie diese These in Beziehung zu Webers Legitimitätsgründen aus Material A.
             </div>
-            <textarea id="def-welfare" class="w-full h-28 p-3 mb-4 resize-none" placeholder="Ihr Text..."></textarea>
+            <textarea id="def-welfare" class="w-full h-28 p-3 mb-1 resize-none" placeholder="Ihr Text..."></textarea>
+            <div class="solution-wrapper" data-for="def-welfare">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box">
+                    <div class="solution-label">Lösungsvorschlag</div>
+                    <p>Schneckener beschreibt, dass in fragilen Staaten häufig nicht-staatliche Akteure (religiöse Organisationen, NGOs, kriminelle Netzwerke) die Wohlfahrtsfunktion des Staates übernehmen, wenn dieser selbst dazu nicht mehr in der Lage ist. Kurzfristig stabilisiert dies die Lage, doch langfristig untergräbt es die Legitimität des Staates, weil die Bevölkerung ihre Loyalität und Dankbarkeit auf diejenigen Akteure überträgt, die tatsächlich Leistungen erbringen. Dies lässt sich direkt mit Webers Legitimitätsgründen verbinden: Die „legale Herrschaft", die auf dem Glauben an rational gesetzte Regeln basiert, verliert ihre Grundlage, wenn der Staat seine Seite des Gesellschaftsvertrags nicht erfüllt. Die Bevölkerung gehorcht dann nicht mehr dem formalen Staat, sondern wendet sich charismatischen lokalen Führern oder traditionalen Strukturen zu, die greifbare Leistungen bieten. Die Wohlfahrtsfunktion ist somit die materielle Basis der Legitimität – ohne Output-Legitimität (Leistungserbringung) erodiert auch die Input-Legitimität (Anerkennung der Herrschaftsform).</p>
+                </div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 1c:</strong> Studieren Sie Material C. Der Fragile States Index wird von manchen Forschern als normativ problematisch betrachtet. Arbeiten Sie die im Text genannten Kritikpunkte heraus und nehmen Sie begründet Stellung dazu, ob ein solcher Index für die politikwissenschaftliche Analyse von Nutzen ist oder ob er mehr schadet als nützt.
             </div>
-            <textarea id="def-legitimacy" class="w-full h-28 p-3 resize-none" placeholder="Ihr Text..."></textarea>
+            <textarea id="def-legitimacy" class="w-full h-28 p-3 mb-1 resize-none" placeholder="Ihr Text..."></textarea>
+            <div class="solution-wrapper" data-for="def-legitimacy">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box">
+                    <div class="solution-label">Lösungsvorschlag</div>
+                    <p>Der Text nennt drei zentrale Kritikpunkte am FSI: Erstens verdichtet er komplexe, mehrdimensionale Phänomene in einem einzigen numerischen Wert und verdeckt damit, dass ein Staat in einzelnen Dimensionen funktionieren, in anderen aber versagen kann. Zweitens setzt die Indikatorenauswahl implizit ein westlich-liberales Staatsverständnis als Norm und markiert alternative Ordnungsformen (z.B. Clan-Strukturen) von vornherein als defizitär. Drittens birgt das Label „Fragile State" das Risiko einer Self-Fulfilling Prophecy, wenn internationale Akteure aufgrund der Einstufung ihre Unterstützung zurückziehen. Für die Beurteilung lässt sich argumentieren, dass der Index trotz seiner Schwächen nützlich ist, weil er Vergleichbarkeit herstellt und die öffentliche Aufmerksamkeit auf Krisenherde lenkt. Die Kritik ist aber berechtigt, dass der Index als Analyserahmen allein nicht ausreicht – er muss durch qualitative, kontextsensible Analysen ergänzt werden, wie sie das Schneckener-Modell bietet.</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -412,8 +538,8 @@ textarea:focus, select:focus {
                     <p>Die UN-Stabilisierungsmission MINUSTAH, die von 2004 bis 2017 in Haiti operierte und zeitweise über 12.000 Soldaten und Polizisten umfasste, konnte zwar die ärgsten Gewaltexzesse eindämmen, wurde jedoch selbst zum Quell schwerer Legitimationskrisen. Der MINUSTAH-Cholera-Skandal, bei dem nepalesische Blauhelmsoldaten 2010 den Erreger in den Artibonite-Fluss einschleppten und damit eine Epidemie auslösten, die über 10.000 Menschen tötete, zerstörte das Vertrauen der haitianischen Bevölkerung in die internationale Gemeinschaft nachhaltig. Hinzu kamen zahlreiche dokumentierte Fälle sexueller Gewalt durch UN-Soldaten gegen die lokale Bevölkerung.</p>
                 </div>
                 <p class="text-xs text-gray-500 mt-3 italic" style="font-family: 'Source Sans 3', sans-serif;">Quellen: Séguy, Franck (2014): La catastrophe de janvier 2010. L'Harmattan; Dubois, Laurent (2012): Haiti: The Aftershocks of History. Metropolitan Books; Hallward, Peter (2007): Damming the Flood. Verso.</p>
-                <a href="https://www.bpb.de/kurz-knapp/hintergrund-aktuell/516677/haiti-in-der-krise/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> bpb: Haiti in der Krise – Hintergrund aktuell</a>
-                <a href="https://www.giga-hamburg.de/de/publikationen/giga-focus/haiti-am-abgrund" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> GIGA Focus: Haiti am Abgrund</a>
+                <a href="https://www.bpb.de/themen/kriege-konflikte/dossier-kriege-konflikte/328218/haiti/" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> bpb: Haiti – Dossier Kriege & Konflikte</a>
+                <a href="https://zeitschrift-vereinte-nationen.de/suche/zvn/artikel/kein-weiter-so-in-haiti" target="_blank" class="external-link"><i class="fas fa-external-link-alt"></i> Zeitschrift Vereinte Nationen: Kein „Weiter so" in Haiti</a>
             </div>
         </details>
 
@@ -441,17 +567,38 @@ textarea:focus, select:focus {
             <div class="task-instruction">
                 <strong>Aufgabe 2a:</strong> Lesen Sie Material D und E. Arbeiten Sie die strukturellen Ursachen heraus, die erklären, warum Haiti – trotz seiner frühen Unabhängigkeit – nie stabile staatliche Strukturen entwickeln konnte. Unterscheiden Sie dabei zwischen endogenen (inneren) und exogenen (äußeren) Faktoren und erläutern Sie deren Wechselwirkung.
             </div>
-            <textarea id="haiti-notes" class="w-full h-36 p-3 mb-4 resize-none" placeholder="Ihr Text..."></textarea>
+            <textarea id="haiti-notes" class="w-full h-36 p-3 mb-1 resize-none" placeholder="Ihr Text..."></textarea>
+            <div class="solution-wrapper" data-for="haiti-notes">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box">
+                    <div class="solution-label">Lösungsvorschlag</div>
+                    <p><strong>Exogene Faktoren:</strong> Die koloniale Ausbeutung durch Frankreich, die erzwungene „Unabhängigkeitsschuld" von 150 Mio. Francs, die den jungen Staat über ein Jahrhundert in Verschuldung band, die US-Besatzung 1915–1934, die demokratische Strukturen zerstörte und ausländischem Grundbesitz den Weg ebnete, sowie wiederkehrende externe Interventionen (1994, 2004, MINUSTAH), die Abhängigkeiten schufen statt Eigenständigkeit zu fördern. <strong>Endogene Faktoren:</strong> Die Duvalier-Diktatur (1957–1986), die durch die Tontons Macoutes Staatsterror institutionalisierte und Ressourcen systematisch abschöpfte, die chronische Korruption der politischen Elite, wiederkehrende Militärputsche und das Fehlen einer gefestigten demokratischen Tradition. <strong>Wechselwirkung:</strong> Exogene Faktoren (Schulden, Interventionen) schwächten die Kapazität für endogenen Institutionenaufbau, während endogene Faktoren (Korruption, Autoritarismus) die negativen Auswirkungen externer Einflussnahme verstärkten. Es entstand ein Teufelskreis, in dem weder interne noch externe Akteure stabile Strukturen aufbauen konnten.</p>
+                </div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 2b:</strong> In Material E wird beschrieben, dass sich Jimmy Chérizier als „Revolutionär und Beschützer der Armen" inszeniert. Analysieren Sie, warum ein solches Narrativ in der haitianischen Bevölkerung auf Resonanz stoßen kann. Beziehen Sie sich dabei auf die in Material B beschriebene Substitution staatlicher Leistungen durch nicht-staatliche Akteure.
             </div>
-            <textarea id="haiti-cherizier" class="w-full h-32 p-3 mb-4 resize-none" placeholder="Ihr Text..."></textarea>
+            <textarea id="haiti-cherizier" class="w-full h-32 p-3 mb-1 resize-none" placeholder="Ihr Text..."></textarea>
+            <div class="solution-wrapper" data-for="haiti-cherizier">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box">
+                    <div class="solution-label">Lösungsvorschlag</div>
+                    <p>Chériziers Selbstinszenierung als „Revolutionär" stößt auf Resonanz, weil der haitianische Staat seit Jahrzehnten seine Wohlfahrtsfunktion nicht erfüllt. Schneckener beschreibt, dass in solchen Situationen nicht-staatliche Akteure an die Stelle des Staates treten und reale Funktionen übernehmen. Gangs wie die G9 bieten in ihren Territorien Schutz, regeln den Zugang zu Ressourcen und schaffen eine Form lokaler Ordnung – genau die Leistungen, die der Staat schuldig bleibt. Für eine verarmte Bevölkerung, die den Staat nur als korrupt und dysfunktional erlebt hat, ist ein Gangführer, der zumindest rudimentäre Daseinsvorsorge bietet und sich verbal gegen die Elite positioniert, durchaus als Autoritätsfigur akzeptabel. Dies illustriert Webers Punkt, dass Legitimität auch durch Charisma entstehen kann. Die paradoxe Folge: Je mehr der Staat versagt, desto mehr Legitimität gewinnen nicht-staatliche Gewaltakteure, was den Staat weiter schwächt.</p>
+                </div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 2c:</strong> Recherchieren Sie mithilfe der weiterführenden Links (OCHA, Crisis Group, IPC) aktuelle Daten zur humanitären Situation in Haiti. Notieren Sie drei konkrete Befunde, die Sie in Ihrer späteren Analyse als Belege verwenden können, und geben Sie jeweils die Quelle an.
             </div>
-            <textarea id="haiti-research" class="w-full h-32 p-3 resize-none" placeholder="Befund 1: ... (Quelle: ...)&#10;Befund 2: ... (Quelle: ...)&#10;Befund 3: ... (Quelle: ...)"></textarea>
+            <textarea id="haiti-research" class="w-full h-32 p-3 mb-1 resize-none" placeholder="Befund 1: ... (Quelle: ...)&#10;Befund 2: ... (Quelle: ...)&#10;Befund 3: ... (Quelle: ...)"></textarea>
+            <div class="solution-wrapper" data-for="haiti-research">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box">
+                    <div class="solution-label">Lösungsvorschlag</div>
+                    <p>Mögliche Befunde (je nach Recherchestand): <strong>1.</strong> Über 5,5 Millionen Menschen in Haiti sind auf humanitäre Hilfe angewiesen, fast die Hälfte der Bevölkerung (Quelle: OCHA Situation Report Haiti). <strong>2.</strong> Die Ernährungslage wurde als IPC Phase 4 (Notfall) eingestuft, große Teile der Bevölkerung sind akut von Hunger bedroht (Quelle: IPC Country Analysis Haiti). <strong>3.</strong> Bewaffnete Gruppen kontrollieren ca. 80–85% des Großraums Port-au-Prince, die Polizei ist personell und materiell massiv unterlegen (Quelle: International Crisis Group, Haiti's Criminal Disorder). Die Schüler sollten eigenständig recherchierte, aktuelle Daten mit korrekter Quellenangabe liefern.</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -488,24 +635,40 @@ textarea:focus, select:focus {
                 <strong>Aufgabe 3a – Sicherheitsfunktion:</strong> Beantworten Sie die in Material F genannten Leitfragen für den Fall Haiti. Stützen Sie Ihre Analyse auf die Materialien D, E und Ihre eigene Recherche. Bewerten Sie abschließend den Zustand der Sicherheitsfunktion als „intakt", „defizitär" oder „kollabiert" und begründen Sie Ihre Einschätzung.
             </div>
             <div class="mb-2"><select id="rating-security" class="border p-2 rounded text-sm bg-white"><option value="-">Bewertung wählen...</option><option value="intakt">Intakt</option><option value="defizitär">Defizitär</option><option value="kollabiert">Kollabiert</option></select></div>
-            <textarea id="ana-security" class="w-full h-32 p-3 mb-6 resize-none" placeholder="Analyse und Belege..."></textarea>
+            <textarea id="ana-security" class="w-full h-32 p-3 mb-1 resize-none" placeholder="Analyse und Belege..."></textarea>
+            <div class="solution-wrapper" data-for="ana-security">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p><strong>Bewertung: Kollabiert.</strong> Die Sicherheitsfunktion in Haiti ist faktisch zusammengebrochen. Das Gewaltmonopol liegt nicht beim Staat, sondern bei kriminellen Allianzen wie der G9, die ca. 80% der Hauptstadt kontrollieren. Die Polizei (PNH) ist mit ca. 9.000 Beamten für 11 Mio. Einwohner massiv unterbesetzt und teils selbst mit den Gangs verflochten. Es existieren ausgedehnte „Zonen begrenzter Staatlichkeit", in denen der Staat keinerlei Präsenz zeigt. Die koordinierten Angriffe auf Gefängnisse, den Flughafen und Polizeistationen im Februar/März 2024 zeigen, dass bewaffnete Gruppen den Staat militärisch herausfordern können, ohne auf ernsthaften Widerstand zu stoßen.</p></div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 3b – Wohlfahrtsfunktion:</strong> Verfahren Sie analog für die Wohlfahrtsfunktion. Nutzen Sie die statistischen Daten (HDI, IPC-Skala) aus den Materialien und Ihre Rechercheergebnisse aus Aufgabe 2c als empirische Grundlage.
             </div>
             <div class="mb-2"><select id="rating-welfare" class="border p-2 rounded text-sm bg-white"><option value="-">Bewertung wählen...</option><option value="intakt">Intakt</option><option value="defizitär">Defizitär</option><option value="kollabiert">Kollabiert</option></select></div>
-            <textarea id="ana-welfare" class="w-full h-32 p-3 mb-6 resize-none" placeholder="Analyse und Belege..."></textarea>
+            <textarea id="ana-welfare" class="w-full h-32 p-3 mb-1 resize-none" placeholder="Analyse und Belege..."></textarea>
+            <div class="solution-wrapper" data-for="ana-welfare">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p><strong>Bewertung: Kollabiert.</strong> Der HDI von 0,53 (niedrigster Wert in der westlichen Hemisphäre) belegt die strukturelle Unterversorgung. Die Blockade der Häfen führte zum Zusammenbruch der Versorgungsketten für Treibstoff, Wasser und Medikamente. Die Gesundheitsinfrastruktur existiert de facto nicht mehr (Cholera-Ausbruch seit 2022 ohne Behandlungskapazitäten). Die IPC-Einstufung auf Stufe 4 signalisiert akute Hungersnot. Bildungseinrichtungen sind geschlossen, Steuererhebung findet praktisch nicht statt. Die Wohlfahrtsfunktion wird, wenn überhaupt, von internationalen Hilfsorganisationen übernommen, deren Zugang jedoch durch die Gangherrschaft massiv eingeschränkt ist.</p></div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 3c – Legitimitätsfunktion:</strong> Analysieren Sie die Legitimitätsdimension. Berücksichtigen Sie insbesondere die Tatsache, dass seit dem Tod von Moïse keine demokratisch legitimierte Regierung mehr existiert und der Übergangsrat von externen Akteuren eingesetzt wurde.
             </div>
             <div class="mb-2"><select id="rating-legitimacy" class="border p-2 rounded text-sm bg-white"><option value="-">Bewertung wählen...</option><option value="intakt">Intakt</option><option value="defizitär">Defizitär</option><option value="kollabiert">Kollabiert</option></select></div>
-            <textarea id="ana-legitimacy" class="w-full h-32 p-3 mb-6 resize-none" placeholder="Analyse und Belege..."></textarea>
+            <textarea id="ana-legitimacy" class="w-full h-32 p-3 mb-1 resize-none" placeholder="Analyse und Belege..."></textarea>
+            <div class="solution-wrapper" data-for="ana-legitimacy">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p><strong>Bewertung: Kollabiert.</strong> Seit der Ermordung von Präsident Moïse existiert keine demokratisch legitimierte Regierung. Es gibt kein funktionsfähiges Parlament, kein Verfassungsgericht und keine Aussicht auf Wahlen. Der im April 2024 eingesetzte Übergangsrat wurde von externen Akteuren (v.a. CARICOM, USA) moderiert und verfügt weder über ein demokratisches Mandat noch über Vertrauen in der Bevölkerung. Die Input-Legitimität (Partizipation, Wahlen) ist vollständig erodiert. Die Output-Legitimität (Leistungserbringung) fehlt ebenfalls, da der Übergangsrat keine Kontrolle über das Territorium hat. Das Vertrauen in den Staat ist durch die historischen Erfahrungen (Korruption, MINUSTAH-Cholera-Skandal, sexuelle Gewalt durch UN-Soldaten) nachhaltig zerstört.</p></div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 3d – Synthese:</strong> Klassifizieren Sie Haiti anhand der Schneckener-Typologie als Weak State, Failing State oder Collapsed State. Beziehen Sie sich auf alle drei Dimensionen und erläutern Sie, ob und warum Sie eine eindeutige Zuordnung für möglich oder problematisch halten. Gehen Sie dabei auch auf die in Material F beschriebene „Fragilitätsfalle" ein.
             </div>
-            <textarea id="ana-synthesis" class="w-full h-36 p-3 resize-none" placeholder="Haiti ist als ... zu klassifizieren, da..."></textarea>
+            <textarea id="ana-synthesis" class="w-full h-36 p-3 mb-1 resize-none" placeholder="Haiti ist als ... zu klassifizieren, da..."></textarea>
+            <div class="solution-wrapper" data-for="ana-synthesis">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p>Haiti ist als <strong>Failed/Collapsed State</strong> zu klassifizieren, da alle drei Dimensionen des Schneckener-Modells schwer beeinträchtigt oder vollständig kollabiert sind. Das Gewaltmonopol liegt bei kriminellen Akteuren, die Wohlfahrtsfunktion ist zusammengebrochen, und es existiert keine demokratisch legitimierte Regierung. Allerdings ist eine völlig eindeutige Zuordnung problematisch: Formale staatliche Institutionen existieren noch (Polizei, Übergangsrat), was Haiti von einem „reinen" Collapsed State wie Somalia in den 1990er Jahren unterscheidet. Es handelt sich eher um eine Grauzone zwischen Failing und Failed State. Die „Fragilitätsfalle" (Material F) ist deutlich erkennbar: Der Verlust des Gewaltmonopols verhindert Daseinsvorsorge, was Legitimität zerstört, was wiederum die Bereitschaft der Bevölkerung senkt, den Staat zu unterstützen – ein selbstverstärkender Abwärtszyklus.</p></div>
+            </div>
         </div>
     </div>
 </div>
@@ -557,17 +720,29 @@ textarea:focus, select:focus {
             <div class="task-instruction">
                 <strong>Aufgabe 4a:</strong> Arbeiten Sie auf Grundlage der Materialien D, E und G die wesentlichen Gemeinsamkeiten und Unterschiede zwischen den Fällen Haiti und Somalia heraus. Konzentrieren Sie sich dabei auf die Rolle nicht-staatlicher Gewaltakteure: Vergleichen Sie die Gangs in Haiti (insbesondere G9) mit Al-Shabaab in Somalia hinsichtlich ihrer Struktur, ihrer Ziele und ihrer Beziehung zur Bevölkerung.
             </div>
-            <textarea id="comp-common-actors" class="w-full h-36 p-3 mb-6 resize-none" placeholder="Vergleichende Analyse der nicht-staatlichen Gewaltakteure..."></textarea>
+            <textarea id="comp-common-actors" class="w-full h-36 p-3 mb-1 resize-none" placeholder="Vergleichende Analyse der nicht-staatlichen Gewaltakteure..."></textarea>
+            <div class="solution-wrapper" data-for="comp-common-actors">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p><strong>Gemeinsamkeiten:</strong> Sowohl G9 als auch Al-Shabaab füllen ein staatliches Machtvakuum, kontrollieren Territorien, erheben eigene „Steuern"/Schutzgelder und bieten der lokalen Bevölkerung eine rudimentäre Ordnung. Beide instrumentalisieren den Frust der Bevölkerung über den gescheiterten Staat. <strong>Unterschiede:</strong> G9 ist eine kriminelle Allianz ohne kohärente Ideologie – Chérizier nutzt revolutionäre Rhetorik, verfolgt aber primär ökonomische Interessen (Drogenhandel, Schutzgelderpressung). Al-Shabaab hingegen verfolgt ein religiös-ideologisches Programm (Scharia-Herrschaft) und operiert als transnationale terroristische Organisation mit Anschlägen auch außerhalb Somalias. Hinsichtlich der Beziehung zur Bevölkerung bieten beide Akteure „Governance-Leistungen", doch Al-Shabaab unterwirft die Bevölkerung gleichzeitig einer strikten Verhaltenskontrolle, während die haitianischen Gangs eher als lokale Machthaber agieren. Al-Shabaab ist ideologisch straffer organisiert (Befehlsstruktur, Rekrutierung), während die G9 ein lockeres Bündnis autonomer Gangs darstellt.</p></div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 4b:</strong> Vergleichen Sie die Rolle externer Interventionen in beiden Fällen. Berücksichtigen Sie die historische Dimension (US-Intervention in Haiti 1994, Operation Restore Hope in Somalia 1993) ebenso wie die aktuellen internationalen Missionen (MSS in Haiti, ATMIS in Somalia). Erörtern Sie, warum externe Interventionen in beiden Fällen keine nachhaltige Stabilisierung bewirken konnten.
             </div>
-            <textarea id="comp-diff-interv" class="w-full h-36 p-3 mb-6 resize-none" placeholder="Vergleichende Analyse der externen Interventionen..."></textarea>
+            <textarea id="comp-diff-interv" class="w-full h-36 p-3 mb-1 resize-none" placeholder="Vergleichende Analyse der externen Interventionen..."></textarea>
+            <div class="solution-wrapper" data-for="comp-diff-interv">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p>In beiden Fällen scheiterten externe Interventionen an ähnlichen Grundproblemen: mangelnde lokale Legitimität, unzureichende Dauer und fehlende Nachhaltigkeit. Die US-Intervention in Haiti 1994 setzte Aristide wieder ein, adressierte aber nicht die strukturellen Ursachen der Instabilität. Operation Restore Hope in Somalia 1993 endete nach der „Schlacht von Mogadischu" in einem traumatischen Rückzug, der zu jahrelanger Nichtbeachtung führte. MINUSTAH in Haiti (2004–2017) wurde durch den Cholera-Skandal und sexuelle Gewalt selbst zum Legitimitätsproblem. AMISOM/ATMIS in Somalia konnte Al-Shabaab eindämmen, aber nicht besiegen. Die aktuelle MSS-Mission in Haiti ist personell zu schwach und leidet unter dem gleichen Grundproblem: Externe Sicherheitsgarantien ohne parallelen politischen Prozess schaffen keine nachhaltige Stabilität. In beiden Fällen fehlt der entscheidende Faktor: ein lokal geführter, inklusiver politischer Prozess, der den Rahmen für den Staatsaufbau setzt.</p></div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 4c:</strong> Lesen Sie Material H über Somaliland. Erörtern Sie, welche Lehren sich aus dem Fall Somaliland für die internationale Gemeinschaft ziehen lassen. Nehmen Sie Stellung zu der These, dass externally driven State-Building weniger erfolgversprechend ist als lokal geführte Friedens- und Staatsbildungsprozesse. Begründen Sie Ihre Position unter Bezugnahme auf die Materialien.
             </div>
-            <textarea id="comp-somaliland" class="w-full h-36 p-3 resize-none" placeholder="Analyse und Stellungnahme..."></textarea>
+            <textarea id="comp-somaliland" class="w-full h-36 p-3 mb-1 resize-none" placeholder="Analyse und Stellungnahme..."></textarea>
+            <div class="solution-wrapper" data-for="comp-somaliland">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p>Somaliland zeigt, dass Staatlichkeit auch ohne externes State-Building entstehen kann, wenn lokale Akteure den Prozess eigenständig führen. Die Schlüsselfaktoren waren Bottom-up-Friedensprozesse, die traditionelle Clan-Strukturen in das formale System integrierten (Guurti als Ältestenrat), statt sie zu ignorieren. Dies entspricht dem „Hybrid Political Orders"-Ansatz aus Material J. Die These, dass externally driven State-Building weniger erfolgversprechend ist, wird durch die Empirie gestützt: Weder in Haiti (MINUSTAH) noch in Süd-Somalia (AMISOM) haben extern moderierte Prozesse nachhaltige Stabilität erzeugt, während Somaliland ohne internationale Hilfe eine deutlich höhere Stabilität erreichte. Allerdings ist die Übertragbarkeit begrenzt: Somaliland profitierte von relativer ethnischer Homogenität und einer klaren Abgrenzung zum gescheiterten Gesamtstaat, Bedingungen, die in Haiti nicht gegeben sind. Die Lehre ist dennoch klar: Nachhaltiger Staatsaufbau muss auf lokaler Ownership basieren und informelle Strukturen einbeziehen, nicht ersetzen.</p></div>
+            </div>
         </div>
     </div>
 </div>
@@ -619,17 +794,29 @@ textarea:focus, select:focus {
             <div class="task-instruction">
                 <strong>Aufgabe 5a:</strong> Lesen Sie Material I. Erörtern Sie, ob die Responsibility to Protect auf den Fall Haiti anwendbar ist. Berücksichtigen Sie dabei sowohl die drei Säulen der R2P als auch die im Text genannte Kritik aus dem Globalen Süden. Beziehen Sie sich auf die historische Erfahrung Haitis mit externen Interventionen (Material D und E).
             </div>
-            <textarea id="transfer-r2p" class="w-full h-36 p-3 mb-6 resize-none" placeholder="Erörterung zur Anwendbarkeit der R2P auf Haiti..."></textarea>
+            <textarea id="transfer-r2p" class="w-full h-36 p-3 mb-1 resize-none" placeholder="Erörterung zur Anwendbarkeit der R2P auf Haiti..."></textarea>
+            <div class="solution-wrapper" data-for="transfer-r2p">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p>Die Anwendbarkeit der R2P auf Haiti ist umstritten. <strong>Dafür spricht:</strong> Die erste Säule (Eigenverantwortung) ist offensichtlich gescheitert – Haiti kann seine Bevölkerung nicht vor systematischer Gewalt schützen. Die zweite Säule (Unterstützung) wird durch die MSS-Mission ansatzweise umgesetzt. Für die dritte Säule (kollektive Maßnahmen) ließe sich argumentieren, dass die humanitäre Katastrophe ein Eingreifen rechtfertigt. <strong>Dagegen spricht:</strong> Die R2P wurde für Fälle konzipiert, in denen der Staat selbst Gewalt gegen seine Bevölkerung ausübt, nicht für Staatsversagen. Die Kritik aus dem Globalen Süden (Missbrauchsrisiko, Neokolonialismus) ist gerade für Haiti brisant, weil das Land eine lange Geschichte externer Dominanz hat – von der französischen Kolonialschuld über die US-Besetzung bis zu MINUSTAH. Jede Intervention unter dem R2P-Banner würde auf tiefes Misstrauen stoßen und möglicherweise die lokale Legitimität untergraben, wie Material D und E belegen.</p></div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 5b:</strong> Studieren Sie Material J. Sie sind als Beraterin oder Berater des Auswärtigen Amtes aufgefordert, eine Handlungsempfehlung für den Umgang mit Haiti zu formulieren. Wägen Sie die vier dargestellten Strategien gegeneinander ab und begründen Sie, welche Strategie oder welche Kombination von Strategien Sie empfehlen würden. Berücksichtigen Sie dabei die spezifischen Bedingungen des Falls Haiti (Gangherrschaft, Nähe zu den USA, historische Belastungen, fehlende Legitimität) sowie die Lehren aus dem Vergleich mit Somalia.
             </div>
-            <textarea id="transfer-recommendation" class="w-full h-48 p-3 mb-6 resize-none" placeholder="Handlungsempfehlung: Es wird empfohlen, dass..."></textarea>
+            <textarea id="transfer-recommendation" class="w-full h-48 p-3 mb-1 resize-none" placeholder="Handlungsempfehlung: Es wird empfohlen, dass..."></textarea>
+            <div class="solution-wrapper" data-for="transfer-recommendation">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p>Es wird eine Kombination aus den Strategien empfohlen, die dem „Hybrid Political Orders"-Ansatz folgt: <strong>Kurzfristig:</strong> Begrenzter, robuster Sicherheitseinsatz zur Sicherung humanitärer Korridore und kritischer Infrastruktur (Häfen, Krankenhäuser), jedoch nicht als dauerhafte Besatzung, sondern als Überbrückung. <strong>Mittelfristig:</strong> Inklusiver Dialog, der auch informelle Machthaber einbezieht – nicht um Gangführer zu legitimieren, sondern um sie in einen verbindlichen politischen Prozess einzubinden, der Anreize für die Aufgabe von Gewalt schafft. <strong>Langfristig:</strong> Aufbau lokaler Kapazitäten (Polizei, Justiz, Verwaltung) unter haitianischer Führung, finanziert durch internationale Mittel, aber gesteuert von haitianischen Akteuren. Rein militärische Intervention (Strategie 1) wird abgelehnt, weil sie die historisch bedingte Interventionsaversion verstärkt. Reines Containment (Strategie 3) wird abgelehnt, weil es die humanitäre Katastrophe ignoriert und langfristig höhere Kosten verursacht. Ein zentrales Risiko: Die Einbindung informeller Akteure kann als Legitimierung von Kriminellen wahrgenommen werden.</p></div>
+            </div>
 
             <div class="task-instruction">
                 <strong>Aufgabe 5c (Vertiefung):</strong> Nehmen Sie kritisch Stellung zu der folgenden These: „Das Scheitern externer Interventionen in fragilen Staaten liegt nicht an der mangelnden Bereitschaft der internationalen Gemeinschaft, sondern an einem fundamentalen Konstruktionsfehler: Der Versuch, westliche Staatlichkeit in Kontexte zu exportieren, in denen die gesellschaftlichen Voraussetzungen dafür nicht gegeben sind, muss zwangsläufig scheitern." Nutzen Sie die Materialien G, H und J als Grundlage Ihrer Argumentation.
             </div>
-            <textarea id="transfer-critical" class="w-full h-36 p-3 resize-none" placeholder="Kritische Stellungnahme..."></textarea>
+            <textarea id="transfer-critical" class="w-full h-36 p-3 mb-1 resize-none" placeholder="Kritische Stellungnahme..."></textarea>
+            <div class="solution-wrapper" data-for="transfer-critical">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p>Die These enthält einen berechtigten Kern: Die Erfahrungen in Afghanistan, Irak und Somalia zeigen, dass der Export westlicher Staatlichkeitsmodelle häufig an fehlenden gesellschaftlichen Voraussetzungen scheitert. Das Somaliland-Beispiel (Material H) stützt dies, denn dort entstand Stabilität gerade nicht durch externes State-Building, sondern durch lokale Prozesse, die traditionelle Strukturen integrierten. Allerdings greift die These zu kurz, wenn sie scheiternde Interventionen allein auf den „Konstruktionsfehler" zurückführt: Auch die mangelnde Bereitschaft der internationalen Gemeinschaft zu langfristigem Engagement (vgl. den hastigen US-Rückzug aus Somalia 1993) und die Inkonsistenz externer Strategien sind relevante Faktoren. Der „Hybrid Political Orders"-Ansatz (Material J) zeigt, dass es Alternativen zum westlichen Blaupausen-Modell gibt, die lokale Strukturen einbeziehen. Die entscheidende Frage ist nicht ob, sondern wie externe Akteure unterstützen – nicht als Architekten, sondern als Katalysatoren lokal geführter Prozesse.</p></div>
+            </div>
         </div>
     </div>
 </div>
@@ -677,17 +864,29 @@ textarea:focus, select:focus {
             <div class="task-instruction">
                 <strong>AFB I – Zusammenfassung (Material M1):</strong> Fassen Sie die Kernaussage des Autors von Material M1 zusammen. Arbeiten Sie heraus, welche „Paradoxie" der Text beschreibt und welchen Lösungsansatz der Autor vorschlägt. Verwenden Sie dabei Ihre eigenen Worte und vermeiden Sie wörtliche Übernahmen.
             </div>
-            <textarea id="txt-afb1" class="w-full h-32 p-3 mb-6 resize-none" placeholder="Zusammenfassung..."></textarea>
+            <textarea id="txt-afb1" class="w-full h-32 p-3 mb-1 resize-none" placeholder="Zusammenfassung..."></textarea>
+            <div class="solution-wrapper" data-for="txt-afb1">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p>Der Autor beschreibt eine Paradoxie: Einerseits haben vergangene externe Interventionen in Haiti die staatlichen Strukturen eher geschwächt als gestärkt, weil sie Abhängigkeiten schufen und die lokale Legitimität untergruben. Andererseits ist die Fähigkeit Haitis zur Selbstregenerierung erschöpft, da das Gewaltmonopol von kriminellen Akteuren privatisiert wurde und ohne externe Sicherheitsgarantien kein politischer Prozess möglich ist. Als Lösung schlägt der Autor einen „Hybrid Political Order"-Ansatz vor, der informelle Machtstrukturen (einschließlich der Gangs) nicht militärisch zerschlagen, sondern in einen verbindlichen Rahmen einbinden und schrittweise transformieren will. Die internationale Gemeinschaft solle kurzfristig Sicherheit garantieren, mittelfristig einen inklusiven politischen Prozess moderieren und langfristig den Aufbau genuiner haitianischer Institutionen ermöglichen.</p></div>
+            </div>
 
             <div class="task-instruction">
                 <strong>AFB II – Analyse (Material M1 und M2):</strong> Analysieren Sie die Argumentation beider Texte im Hinblick auf die Frage, warum externe Interventionen in Haiti scheitern. Arbeiten Sie heraus, welche unterschiedlichen Erklärungsansätze die Texte verfolgen: Material M1 argumentiert primär auf der politisch-institutionellen Ebene, Material M2 auf der ökonomischen Ebene. Erläutern Sie, wie sich beide Perspektiven ergänzen, und beziehen Sie Ihr Wissen über das Schneckener-Modell (Material B) in die Analyse ein.
             </div>
-            <textarea id="txt-afb2" class="w-full h-40 p-3 mb-6 resize-none" placeholder="Analyse..."></textarea>
+            <textarea id="txt-afb2" class="w-full h-40 p-3 mb-1 resize-none" placeholder="Analyse..."></textarea>
+            <div class="solution-wrapper" data-for="txt-afb2">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p>Material M1 argumentiert primär auf der <strong>politisch-institutionellen Ebene</strong>: Interventionen scheitern, weil sie die lokale Legitimität untergraben und keine haitianisch geführten Prozesse ermöglichen. Das Problem wird als Teufelskreis zwischen externer Abhängigkeit und interner Erosion beschrieben. Material M2 ergänzt dies durch eine <strong>ökonomische Perspektive</strong>: Staatszerfall ist für bestimmte Akteure (Drogenhändler, korrupte Eliten, Gangführer) ein Geschäftsmodell, weil die Abwesenheit des Staates regulierungsfreie Profitmöglichkeiten schafft. Interventionen scheitern demnach auch, weil sie die ökonomischen Anreize nicht verändern. Beide Perspektiven ergänzen sich, wenn man sie in Schneckeners Modell einordnet: M1 betrifft die Legitimitätsdimension (Interventionen untergraben Legitimität), M2 die Wohlfahrtsdimension (illegale Ökonomie ersetzt formale Wirtschaft). Gemeinsam erklären sie die „Fragilitätsfalle": Sicherheitsinterventionen allein reichen nicht aus, wenn die ökonomischen Strukturen den Konflikt finanzieren und die politischen Strukturen keine Legitimität genießen.</p></div>
+            </div>
 
             <div class="task-instruction">
                 <strong>AFB III – Erörterung (Material M2):</strong> In Material M2 wird die These vertreten, dass „Anarchie zum Geschäftsmodell" werden kann und dass die Krise in Haiti nicht isoliert von globalen Strukturen der organisierten Kriminalität verstanden werden kann. Setzen Sie sich kritisch mit dieser These auseinander. Berücksichtigen Sie dabei die folgenden Aspekte: Inwieweit entlastet die Betonung externer Faktoren die haitianischen Akteure von ihrer Verantwortung? Welche Konsequenzen ergeben sich aus dieser Perspektive für die in Material J dargestellten Interventionsstrategien? Nutzen Sie für Ihre Argumentation alle bisherigen Materialien und Ihre eigene Recherche.
             </div>
-            <textarea id="txt-afb3" class="w-full h-44 p-3 resize-none" placeholder="Kritische Erörterung..."></textarea>
+            <textarea id="txt-afb3" class="w-full h-44 p-3 mb-1 resize-none" placeholder="Kritische Erörterung..."></textarea>
+            <div class="solution-wrapper" data-for="txt-afb3">
+                <button class="solution-btn" onclick="toggleSolution(this)"><i class="fas fa-lock lock-icon"></i> Lösungsvorschlag <span class="word-count">(0/15 Wörter)</span></button>
+                <div class="solution-box"><div class="solution-label">Lösungsvorschlag</div><p>Die These, dass „Anarchie zum Geschäftsmodell" wird, ist analytisch überzeugend: Sie erklärt, warum Friedensabkommen scheitern (weil Akteure von der Fortsetzung des Konflikts profitieren) und warum Sanktionen wirkungslos bleiben (weil die Schattenwirtschaft vom formalen System entkoppelt ist). Die globale Perspektive (Waffen aus den USA, Kokain aus Südamerika, Geldwäsche über die Dominikanische Republik) ist wichtig, weil sie zeigt, dass die Krise nicht allein endogenen Ursprungs ist. <strong>Kritisch ist jedoch:</strong> Die Betonung externer Faktoren birgt das Risiko, haitianische Akteure von ihrer Verantwortung zu entlasten – die Korruption der politischen Elite, die Gewalt der Gangs und das Versagen der Institutionen sind auch Produkte haitianischer Entscheidungen. Für die Interventionsstrategien (Material J) folgt daraus, dass rein sicherheitspolitische Ansätze zu kurz greifen: Wenn die „Ökonomie des Chaos" den Konflikt antreibt, muss jede Strategie auch die ökonomischen Anreize verändern – etwa durch gezielte Sanktionen gegen Profiteure, alternative Einkommensquellen und die Bekämpfung transnationaler Netzwerke. Der Hybrid-Political-Orders-Ansatz muss um eine ökonomische Dimension ergänzt werden.</p></div>
+            </div>
         </div>
     </div>
 </div>
@@ -787,7 +986,55 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!document.querySelector('.tab-content.active')) {
         switchTab('start');
     }
+    initSolutionButtons();
 });
+
+// ======== SOLUTION BUTTON LOGIC ========
+function initSolutionButtons() {
+    document.querySelectorAll('.solution-wrapper').forEach(wrapper => {
+        const textareaId = wrapper.getAttribute('data-for');
+        const textarea = document.getElementById(textareaId);
+        if (!textarea) return;
+
+        const btn = wrapper.querySelector('.solution-btn');
+        const countSpan = btn.querySelector('.word-count');
+
+        function updateState() {
+            const words = textarea.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+            countSpan.textContent = `(${words}/15 Wörter)`;
+            if (words >= 15) {
+                btn.classList.add('unlocked');
+                btn.querySelector('.lock-icon').classList.remove('fa-lock');
+                btn.querySelector('.lock-icon').classList.add('fa-unlock');
+            } else {
+                btn.classList.remove('unlocked');
+                btn.querySelector('.lock-icon').classList.remove('fa-unlock');
+                btn.querySelector('.lock-icon').classList.add('fa-lock');
+                // Hide solution if text drops below threshold
+                wrapper.querySelector('.solution-box').classList.remove('visible');
+            }
+        }
+
+        textarea.addEventListener('input', updateState);
+        // Run once on load to check saved content
+        updateState();
+    });
+}
+
+function toggleSolution(btn) {
+    const wrapper = btn.closest('.solution-wrapper');
+    if (!btn.classList.contains('unlocked')) return;
+    const box = wrapper.querySelector('.solution-box');
+    box.classList.toggle('visible');
+    if (box.classList.contains('visible')) {
+        btn.innerHTML = '<i class="fas fa-eye-slash lock-icon"></i> Lösung ausblenden';
+    } else {
+        const textareaId = wrapper.getAttribute('data-for');
+        const textarea = document.getElementById(textareaId);
+        const words = textarea.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+        btn.innerHTML = `<i class="fas fa-unlock lock-icon"></i> Lösungsvorschlag <span class="word-count">(${words}/15 Wörter)</span>`;
+    }
+}
 </script>
 </body>
 </html>
